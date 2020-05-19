@@ -1,0 +1,5 @@
+2020-05-08T18:56:47.431Z [My logger] [31merror[39m: What time is the testing at?
+{"level":"\u001b[31merror\u001b[39m","message":"What time is the testing at?","label":"My logger","timestamp":"2020-05-08T19:03:37.504Z"}
+{"level":"\u001b[31merror\u001b[39m","message":"What time is the testing at?","label":"My logger","timestamp":"2020-05-08T19:03:47.856Z"}
+{"level":"\u001b[31merror\u001b[39m","message":"What time is the testing at?","label":"My logger","timestamp":"2020-05-08T19:05:15.306Z"}
+2020-05-08T19:05:35.559Z [My logger] [31merror[39m: What time is the testing at?

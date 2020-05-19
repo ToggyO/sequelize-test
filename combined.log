@@ -1,0 +1,32 @@
+2020-05-08T18:52:47.089Z [My logger] [32minfo[39m: What time is the testing at?
+2020-05-08T18:53:04.119Z [My logger] info: What time is the testing at?
+2020-05-08T18:53:44.752Z [My logger] [32minfo[39m: What time is the testing at?
+{
+  level: '\u001b[32minfo\u001b[39m',
+  message: 'What time is the testing at?',
+  label: 'My logger',info
+  timestamp: '2020-05-08T18:53:56.345Z'
+}
+undefined
+undefined
+{
+  level: '\u001b[32minfo\u001b[39m',
+  message: 'What time is the testing at?',
+  label: 'My logger',
+  timestamp: '2020-05-08T18:55:21.632Z'
+}
+2020-05-08T18:55:30.348Z [My logger] [32minfo[39m: What time is the testing at?
+2020-05-08T18:56:47.431Z [My logger] [31merror[39m: What time is the testing at?
+{"level":"\u001b[31merror\u001b[39m","message":"What time is the testing at?","label":"My logger","timestamp":"2020-05-08T19:03:37.504Z"}
+{"level":"\u001b[31merror\u001b[39m","message":"What time is the testing at?","label":"My logger","timestamp":"2020-05-08T19:03:47.856Z"}
+{"level":"\u001b[31merror\u001b[39m","message":"What time is the testing at?","label":"My logger","timestamp":"2020-05-08T19:05:15.306Z"}
+2020-05-08T19:05:35.559Z [My logger] [31merror[39m: What time is the testing at?
+2020-05-08T19:05:53.101Z [My logger] [36minfo[39m: What time is the testing at?
+{"level":"\u001b[36minfo\u001b[39m","message":"What time is the testing at?","label":"My logger","timestamp":"2020-05-08T19:06:35.151Z"}
+2020-05-08T19:32:03.474Z [My logger] [36minfo[39m: Server running at http://0.0.0.0:3010, in development mode. 
+{
+  level: '\u001b[36minfo\u001b[39m',
+  message: 'What time is the testing at?',
+  label: 'My logger',
+  timestamp: '2020-05-09T16:48:33.019Z'
+}
