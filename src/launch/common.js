@@ -8,10 +8,10 @@ const config = require('../config');
 const logger = require('../utils/logger');
 const pack = require('../../package.json');
 
-(function SomeResource() {
-  // Initially set the loaded status to a rejected promise
-  this.loaded = Promise.reject(new Error('Resource not yet loaded!'));
-})();
+// (function SomeResource() {
+//   // Initially set the loaded status to a rejected promise
+//   this.loaded = Promise.reject(new Error('Resource not yet loaded!'));
+// })();
 /**
  * Поиск необработанных ошибок
  * @param {object} app - экземпляр приложения
