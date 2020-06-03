@@ -1,7 +1,7 @@
 /**
  * Описание: Класс для работы с базой данных с общими системными методами
  */
-const Sequelize = require('sequelize');
+import Sequelize from 'sequelize';
 
 class Connector {
 	/**
@@ -9,10 +9,10 @@ class Connector {
    * @returns {void}
    */
 	constructor(props = {}) {
-		Object.keys(props).forEach(propName => {
+		Object.keys(props).forEach((propName) => {
 			this[`_${propName}`] = props[propName];
 		});
-	};
+	}
 
 	/**
    * Инициализация подключения
@@ -24,23 +24,23 @@ class Connector {
    */
 	init(dbName, dbUser, dbPassword, dbOptions = {}) {
 		this._sequelize = new Sequelize(dbName, dbUser, dbPassword, dbOptions);
-	};
+	}
 
 	/**
    * Геттер экземпляра
    * @returns {Promise}
    */
 	testConnection() {
-    return this._sequelize.authenticate();
-	};
+		return this._sequelize.authenticate();
+	}
 
 	/**
    * Геттер экземпляра sequelize
    * @returns {object}
    */
 	getSequelizeInstance() {
-    return this._sequelize;
-  };
+		return this._sequelize;
+	}
 }
 
-module.exports.db = new Connector();
+export const db = new Connector();

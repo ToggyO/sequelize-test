@@ -1,15 +1,15 @@
 /**
  * Описание: Файл содержит сервис для модуля Партнеры
  */
-const { UserModel } = require('./user.model');
-const { UserValidator } = require('./user.validator');
-const { getProp } = require('../../../utils/helpers');
-const { USER_ERROR_MESSAGES } = require('./constants');
-const { ERROR_CODES } = require('../../../constants');
-const { ApplicationError } = require('../../../utils/response');
+import { getProp } from '@utils/helpers';
+import { ERROR_CODES } from '@constants';
+import { ApplicationError } from '@utils/response';
+import { UserModel } from './user.model';
+import { UserValidator } from './user.validator';
+import { USER_ERROR_MESSAGES } from './constants';
 
 // TODO: добавить basicService
-const UserService = Object.create({});
+export const UserService = Object.create({});
 
 UserService._getModel = () => UserModel;
 UserService._getModels = () => UserModel._getModels();
@@ -26,7 +26,7 @@ UserService.getUsers = async function ({
 	return {
 		items: getProp(users, 'rows', []),
 	};
-}
+};
 
 /**
  * Получить пользователя
@@ -37,7 +37,7 @@ UserService.getUser = async function ({
 	where = {},
 } = {}) {
 	return UserModel.findOne({ where });
-}
+};
 
 /**
  * Создать пользователя
@@ -52,7 +52,7 @@ UserService.createUser = async function ({ values = {} }) {
 	const createdUser = await UserModel.create({ name, age });
 
 	return createdUser;
-}
+};
 
 /**
  * Редактировать пользователя
@@ -74,7 +74,7 @@ UserService.updateUser = async function ({ id, values = {} }) {
 	);
 
 	return updatedUser[1][0];
-}
+};
 
 /**
  * Загрузка файла компании-партнера
@@ -82,10 +82,7 @@ UserService.updateUser = async function ({ id, values = {} }) {
  * @returns {number} - количество удаленных сущностей
  */
 UserService.deleteUser = async function ({ id }) {
-
 	const deletedRowsCount = await UserModel.destroy({ where: { id } });
-		
-	return deletedRowsCount;
-}
 
-module.exports = UserService;
+	return deletedRowsCount;
+};

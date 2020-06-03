@@ -5,7 +5,7 @@ const { Validator } = require('../../../utils/validation');
 const { ApplicationError } = require('../../../utils/response');
 const { ERROR_CODES } = require('../../../constants');
 
-const UserValidator = Object.create({});
+export const UserValidator = Object.create({});
 
 UserValidator.createUpdateUserValidator = async function (values = {}) {
 	const { name, age } = values;
@@ -23,6 +23,4 @@ UserValidator.createUpdateUserValidator = async function (values = {}) {
 			errors,
 		});
 	}
-}
-
-module.exports.UserValidator = UserValidator;
+};

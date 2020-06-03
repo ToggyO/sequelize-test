@@ -1,17 +1,15 @@
 /**
  * Описание: Файл содержит контроллер для обработки роутинга модуля пользователей
  */
-const Sequelize = require('sequelize');
+import { ApplicationError, getSuccessRes } from '@utils/response';
+import { getProp } from '@utils/helpers';
+import { BUSINESS_CONFLICT, ERROR_CODES } from '@constants';
+import { UserService } from './user.service';
+import { USER_ERROR_MESSAGES } from './constants';
 
-const UserService = require('./user.service');
-const { getSuccessRes } = require('../../../utils/response');
-const { getProp } = require('../../../utils/helpers');
-const { ApplicationError } = require('../../../utils/response');
-const { USER_ERROR_MESSAGES } = require('./constants');
-const { ERROR_CODES, BUSINESS_CONFLICT } = require('../../../constants');
 // const { Op } = Sequelize;
 
-const UserController = Object.create({});
+export const UserController = {};
 
 const notFoundErrorPayload = {
 	statusCode: 404,
@@ -30,10 +28,10 @@ const notFoundErrorPayload = {
 UserController.getUsers = async (req, res, next) => {
 	try {
 		const users = await UserService.getUsers({});
-		
+
 		res.status(200).send(getSuccessRes({ resultData: users }));
 	} catch (error) {
-    next(error);
+		next(error);
 	}
 };
 
@@ -56,16 +54,16 @@ UserController.getUser = async (req, res, next) => {
 		};
 
 		if (!id) throw new ApplicationError(badParameterErrorPayload);
-		
+
 		const user = await UserService.getUser({
 			where: { id },
 		});
 
 		if (!user) throw new ApplicationError(notFoundErrorPayload);
-		
+
 		res.status(200).send(getSuccessRes({ resultData: user }));
 	} catch (error) {
-    next(error);
+		next(error);
 	}
 };
 
@@ -79,10 +77,10 @@ UserController.getUser = async (req, res, next) => {
 UserController.createUser = async (req, res, next) => {
 	try {
 		const createdUser = await UserService.createUser({ values: req.body });
-		
+
 		res.status(201).send(getSuccessRes({ resultData: createdUser }));
 	} catch (error) {
-    next(error);
+		next(error);
 	}
 };
 
@@ -114,7 +112,7 @@ UserController.updateUser = async (req, res, next) => {
 
 		res.status(200).send(getSuccessRes({ resultData: updatedUser }));
 	} catch (error) {
-    next(error);
+		next(error);
 	}
 };
 
@@ -144,8 +142,6 @@ UserController.deleteUser = async (req, res, next) => {
 
 		res.status(200).send(getSuccessRes({}));
 	} catch (error) {
-    next(error);
+		next(error);
 	}
 };
-
-module.exports = UserController;

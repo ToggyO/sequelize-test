@@ -2,20 +2,21 @@
  * Описание: Файл содержит класс хелпер (и функцию, инициализирующую его)
  * для валидации входных параметров запросов
  */
-const { VALIDATION_ERRORS } = require('../../constants');
+import { VALIDATION_ERRORS } from '@constants';
+// import { VALIDATION_ERRORS } from '@constants/validations-errors';
 
-class Validator {	
+export class Validator {
 	constructor({
 		value,
 		field,
 		shouldTrimValue = true,
-    additionalParams,
+		additionalParams,
 	}) {
-    this.error = null;
-    this.value = shouldTrimValue && typeof value === 'string' ? value.trim() : value;
-    this.field = field;
-    this.additionalParams = additionalParams;
-	};
+		this.error = null;
+		this.value = shouldTrimValue && typeof value === 'string' ? value.trim() : value;
+		this.field = field;
+		this.additionalParams = additionalParams;
+	}
 
 	/**
    * Константа, определяющая, необходимо ли возвращать массив ошибок пустым
@@ -49,24 +50,24 @@ class Validator {
    * @returns {object}
    */
   result = () => {
-    if (this.#shouldReturnEmptyError) {
-      return [];
-    }
-    return this.error ? [this.error] : [];
-	};
-	
-	/**
+  	if (this.#shouldReturnEmptyError) {
+  		return [];
+  	}
+  	return this.error ? [this.error] : [];
+  };
+
+  /**
    * Валидация: необязательный параметр
    * Останавливает цепочку валидации, при пустом проверяемом значении
    * @returns {this}
    */
   notRequired = () => {
-    if (!this.value && this.value !== false) {
-      this.#shouldReturnEmptyError = true;
-    }
-    return this;
-	};
-	
+  	if (!this.value && this.value !== false) {
+  		this.#shouldReturnEmptyError = true;
+  	}
+  	return this;
+  };
+
 	/**
    * Валидация: обязательный параметр
    * @param required - если required === false, то метод работает как this.notRequired
@@ -74,17 +75,17 @@ class Validator {
    */
 	required = (required = true) => {
 		if (this.error || this.#shouldReturnEmptyError) return this;
-    if (!required) {
-      this.notRequired();
-      return this;
-    }
+		if (!required) {
+			this.notRequired();
+			return this;
+		}
 		if (!this.value && this.value !== false && this.value !== 0) {
 			this.#setNewError(VALIDATION_ERRORS.requiredField({ field: this.field }));
 		}
 		return this;
 	};
-	
-  /**
+
+	/**
    * Валидация: значение является числом
    * @returns {this}
    */

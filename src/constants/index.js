@@ -1,27 +1,6 @@
 /**
  * Описание: Экспорт констант
  */
-const { ERROR_CODES } = require('./error-codes');
-const { POSSIBLE_VALIDATION_CODES, VALIDATION_ERRORS } = require('./validation-errors');
-const {
-	POSSIBLE_CODES,
-	SUCCESS,
-	NOT_FOUND,
-	BUSINESS_CONFLICT,
-	BAD_PARAMETERS,
-	UNPROCESSABLE_ENTITY,
-	INTERNAL_ERROR,
-} = require('./error-codes');
-
-module.exports = {
-	ERROR_CODES,
-	POSSIBLE_CODES,
-	SUCCESS,
-	NOT_FOUND,
-	BUSINESS_CONFLICT,
-	BAD_PARAMETERS,
-	UNPROCESSABLE_ENTITY,
-	INTERNAL_ERROR,
-	POSSIBLE_VALIDATION_CODES,
-	VALIDATION_ERRORS,
-};
+export * from './error-codes';
+export * from './validation-errors';
+export * from './response-codes';

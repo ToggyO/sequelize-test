@@ -1,0 +1,21 @@
+{
+  "schemas": {
+    "name": {
+      "type": "string"
+    },
+    "age": {
+      "type": "number"
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "$ref": "#/components/schemas/name"
+        },
+        "age": {
+          "$ref": "#/components/schemas/age"
+        }
+      }
+    }
+  }
+}

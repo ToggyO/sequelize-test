@@ -8,9 +8,9 @@
  * @param {*} data.resultData - данные для отправки
  * @return {object} результат, отправляемый на клиент
  */
-module.exports.getSuccessRes = ({
+export const getSuccessRes = ({
 	resultData = null,
-}) => ({
+} = {}) => ({
 	errorCode: 0,
 	resultData,
 });

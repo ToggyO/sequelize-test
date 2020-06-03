@@ -1,5 +1,1 @@
-const { getProp } = require('./common');
-
-module.exports = {
-	getProp,
-};
+export * from './common';

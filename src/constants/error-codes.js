@@ -1,7 +1,7 @@
 /**
  * Описание: Константы с возможными кодами ответов сервера
  */
-module.exports.ERROR_CODES = {
+export const ERROR_CODES = {
 	success: 0,
 	not_found: 1,
 	// ошибки пользовательских данных

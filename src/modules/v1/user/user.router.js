@@ -1,16 +1,42 @@
 /**
  * Описание: Файл содержит роутинг и определения сваггера для модуля компаний партнеров
  */
-// TODO: добавить сваггер
-const { Router } = require('express');
+import { Router } from 'express';
 
-const UserController = require('./user.controller');
+import { UserController } from './user.controller';
 
 /**
  * Роутер: Users
  */
-module.exports = () => {
+export const createRouter = () => {
 	const router = Router();
+
+	/**
+	 * Получить список компаний
+	 * @swagger
+	 * /users:
+	 *    get:
+	 *      tags:
+	 *        - Users
+	 *      description: Get users
+	 *      summary: Get list of users
+	 *      produces:
+	 *      	- application/json
+	 *      responses:
+	 *      	'200':
+	 *          description: Successful operation
+	 *					content:
+	 *						application/json:
+	 *							schema:
+	 *								type: object
+	 *								properties:
+	 *    	        		errorCode:
+	 *                		type: number
+	 *										example: 0
+	 *									resultData:
+	 *                		type: object
+	 *										$ref: '#/components/schemas/User'
+	 */
 
 	router.get('/', UserController.getUsers);
 

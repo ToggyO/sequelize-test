@@ -1,15 +1,15 @@
 /**
  * Описание: Подключение к Postgres SQL
  */
-const { db } = require('../db');
-const config = require('../config');
+import config from '../config';
+import { db } from '../db';
 
 /**
  * Запуск процесса подключения к базе данных
  * @param { object } app - экземпляр приложения
  * @returns {Promise<void>}
  */
-module.exports.dbRun = async ({ app }) => {
+export const run = async ({ app }) => {
 	db.init(config.POSTGRES_DATABASE, config.POSTGRES_USER, config.POSTGRES_PASSWORD, {
 		host: config.POSTGRES_HOST,
 		port: config.POSTGRES_PORT,
@@ -22,13 +22,13 @@ module.exports.dbRun = async ({ app }) => {
 		},
 	});
 
-  // Проверка соединения с базой данных
+	// Проверка соединения с базой данных
 	try {
 		await db.testConnection();
-    console.info('Соединение с базой данной прошло успешно!');
+		console.info('Соединение с базой данной прошло успешно!');
 		// привязать экземпляр DB
 		app.set('db', db);
 	} catch (error) {
-    console.info('Ошибка соединения с базой данной: ', error);
+		console.info('Ошибка соединения с базой данной: ', error);
 	}
 };

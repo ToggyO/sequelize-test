@@ -1,19 +1,26 @@
 /**
  * Описание: Корневой обработчик ошибок запросов пользователей
  */
-const { log } = require('./common');
-const { ERROR_CODES } = require('../constants');
+import { ERROR_CODES } from '@constants';
+import { log } from './common';
+// import * as Sentry from '@sentry/node';
+// import config from '/config';
 
 /**
  * Инициализация базового обработчика ошибок, возникающих при пользовательских запросах
  * @param {object} app - экземпляр приложения
  * @returns {void}
  */
-module.exports.errorHandlerRun = ({ app }) => {
-	app.use((err, req, res, next) => {
+export const run = ({ app }) => {
+	app.use((err, req, res, next) => { // eslint-disable-line
+		// if (config.isProduction && config.SENTRY_DSN) {
+		// 	Sentry.captureException(err);
+		// }
+
 		if (!err.errorCode) {
 			log.error(err);
 		}
+
 		if (err.statusCode && err.errorMessage) {
 			const {
 				statusCode, errorCode, errorMessage, errors = [],

@@ -1,16 +1,16 @@
 /**
  * Описание: Корневой файл приложения
  */
-const express = require('express');
+import express from 'express';
 
-const config = require('./config');
-const launch = require('./launch');
+import config from './config';
+import launch from './launch';
 
 /**
  * Функция инициализирующая приложения
  * @returns {function}
  */
-const init = (async () => {
+export const init = (async () => {
 	const app = express();
 
 	// TODO: добавить загрузку файлов
@@ -18,18 +18,15 @@ const init = (async () => {
 		await launch({ app });
 	} catch (error) {
 		console.log(error);
-    process.exit(1);
+		process.exit(1);
 	}
 
 	const { PORT, HOST, NODE_ENV } = config;
 
 	app.listen({ port: PORT, host: HOST }, () => {
-		app.get('log').info(`Server running at http://${HOST}:${PORT}, in ${NODE_ENV} mode. `)
+		app.get('log').info(`Server running at http://${HOST}:${PORT}, in ${NODE_ENV} mode. `
+			+ `Swagger: http://${HOST}:${PORT}${config.API_URL_PREFIX}`);
 	});
 
-  // app.listen({ port: PORT, host: HOST }, () => {
-  //   app.get('log').info(`Server running at http://${HOST}:${PORT}, in ${NODE_ENV} mode. `
-  //     + `Swagger: http://${HOST}:${PORT}${config.API_URL_PREFIX}/documentation`);
-	// });
-  return app;
+	return app;
 })();

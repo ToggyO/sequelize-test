@@ -4,18 +4,18 @@
 const config = require('../config');
 
 module.exports = {
-  development: {
-    username: config.POSTGRES_USER,
-    password: config.POSTGRES_PASSWORD,
-    database: config.POSTGRES_DATABASE,
-    host: config.POSTGRES_HOST,
-    dialect: 'postgres',
-  },
-  production: {
-    username: config.POSTGRES_USER,
-    password: config.POSTGRES_PASSWORD,
-    database: config.POSTGRES_DATABASE,
-    host: config.POSTGRES_HOST,
-    dialect: 'postgres',
-  },
+	development: {
+		username: config.POSTGRES_USER,
+		password: config.POSTGRES_PASSWORD,
+		database: config.POSTGRES_DATABASE,
+		host: config.POSTGRES_HOST,
+		dialect: 'postgres',
+	},
+	production: {
+		username: config.POSTGRES_USER,
+		password: config.POSTGRES_PASSWORD,
+		database: config.POSTGRES_DATABASE,
+		host: config.POSTGRES_HOST,
+		dialect: 'postgres',
+	},
 };

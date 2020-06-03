@@ -1,17 +1,17 @@
-const path = require('path');
-const fs = require('fs');
-const { createLogger, transports, format } = require('winston');
-const chalk = require('chalk');
+import path from 'path';
+import fs from 'fs';
+import { createLogger, transports, format } from 'winston';
+import chalk from 'chalk';
 
 const { combine, json, prettyPrint } = format;
 
-module.exports = class ProductionStrategy {
+export default class ProductionStrategy {
 	constructor(props = {}) {
 		this.#levels = {
 			error: 0,
 			warn: 1,
-      info: 2,
-      debug: 3,
+			info: 2,
+			debug: 3,
 		};
 		this.#colors = {
 			debug: 'orange',
@@ -20,12 +20,13 @@ module.exports = class ProductionStrategy {
 			error: 'red',
 		};
 
-		Object.keys(props).forEach(propName => {
+		Object.keys(props).forEach((propName) => {
 			this[`_${propName}`] = props[propName];
 		});
 
-    // ensure log directory exists
-		const logDirectory = path.join(__dirname, `../../../../${this.#catalogName}`)
+		// ensure log directory exists
+		const logDirectory = path.join(__dirname, `../../../../${this.#catalogName}`);
+		// eslint-disable-next-line no-unused-expressions
 		fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
 
 		this.#logMethodsFabric(this.#levels);
@@ -33,7 +34,7 @@ module.exports = class ProductionStrategy {
 		this.stream = {
 			write: (message) => this.warn(message),
 		};
-	};
+	}
 
 	#levels;
 
@@ -46,10 +47,8 @@ module.exports = class ProductionStrategy {
    * @returns {never}
    * @private
    */
-  #transportFormatterCustom = () => {
-    return format((info, options) => this.#transportDataFormatter(info, options));
-	};
-	
+  #transportFormatterCustom = () => format((info, options) => this.#transportDataFormatter(info, options));
+
 	/**
    * Prepare Winston transport
    * @param {string} level
@@ -57,7 +56,7 @@ module.exports = class ProductionStrategy {
    * @private
    */
 	#transportCreator = ({ level } = {}) => {
-    const custom = this.#transportFormatterCustom();
+		const custom = this.#transportFormatterCustom();
 		const fileTransport = new transports.File({
 			level,
 			name: `file#${level}`,
@@ -67,7 +66,7 @@ module.exports = class ProductionStrategy {
 			format: combine(
 				custom({ type: 'file' }),
 				json(),
-        prettyPrint(),
+				prettyPrint(),
 			),
 		});
 
@@ -102,7 +101,7 @@ module.exports = class ProductionStrategy {
 	#getUpDate = () => {
 		const now = Date.now();
 		const upTime = parseInt(process.uptime(), 10);
-    const upDateInMS = now - upTime;
+		const upDateInMS = now - upTime;
 		const upDate = new Date(upDateInMS).toISOString();
 		return upDate;
 	};
@@ -114,16 +113,15 @@ module.exports = class ProductionStrategy {
    */
 	#logMethodsFabric = (levels = {}) => {
 		const custom = this.#transportFormatterCustom();
-    const customConsole = custom({ type: 'console' });
+		const customConsole = custom({ type: 'console' });
 
-		Object.keys(levels).forEach(level => {
+		Object.keys(levels).forEach((level) => {
 			this[`#${level}Logger`] = this.#loggerCreator(level);
 
 			this[level] = (message, options = {}) => {
 				if (typeof message !== 'string') return;
 				const { color = this.#colors[level] } = options;
 				const coloredOutput = chalk.keyword(color);
-        const { name = 'server', version = 'unknown' } = this._app;
 				const logMessage = (() => {
 					let msg;
 					try {
@@ -151,8 +149,8 @@ module.exports = class ProductionStrategy {
    * @returns {object}
    * @private
    */
-	#loggerCreator = level => {
-    const { name = 'server' } = this._app;
+	#loggerCreator = (level) => {
+		const { name = 'server' } = this._app;
 		return createLogger({
 			level,
 			defaultMeta: { service: name },
@@ -161,4 +159,3 @@ module.exports = class ProductionStrategy {
 		});
 	};
 }
-

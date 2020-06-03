@@ -1,5 +1,4 @@
-const { Validator } = require('./Validator');
-
-module.exports = {
-	Validator,
-};
+/**
+ * Описание: Экспорт валидатора
+ */
+export * from './Validator';

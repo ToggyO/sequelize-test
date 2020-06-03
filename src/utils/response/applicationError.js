@@ -1,7 +1,7 @@
 /**
  * Описание: Файл содержит глобальный конструктор ошибки при обработке запроса
  */
-const { INTERNAL_ERROR, ERROR_CODES } = require('../../constants');
+import { INTERNAL_ERROR, ERROR_CODES } from '@constants';
 
 class ApplicationError extends Error {
 	constructor({
@@ -26,4 +26,4 @@ class ApplicationError extends Error {
 	}
 }
 
-module.exports.ApplicationError = ApplicationError;
+export { ApplicationError };
