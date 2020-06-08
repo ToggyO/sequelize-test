@@ -6,6 +6,7 @@ import { getProp } from '@utils/helpers';
 import { BUSINESS_CONFLICT, ERROR_CODES } from '@constants';
 import { UserService } from './user.service';
 import { USER_ERROR_MESSAGES } from './constants';
+import { UserModel } from './user.model';
 
 // const { Op } = Sequelize;
 
@@ -16,6 +17,23 @@ const notFoundErrorPayload = {
 	errorMessage: USER_ERROR_MESSAGES.NOT_FOUND,
 	errorCode: ERROR_CODES.not_found,
 	errors: [],
+};
+
+/**
+ * Получить пользователя как общий ответ
+ * на операции создания / редактирования / получения по id
+ * @param {string|number} id
+ * @returns {Promise<object>}
+ */
+UserController._getEntityResponse = async ({ id }) => {
+	const userAttributes = UserService._getModelAttributes({
+		model: UserModel,
+	});
+
+	return UserService.getUser({
+		where: { id },
+		attributes: userAttributes,
+	});
 };
 
 /**
@@ -45,23 +63,13 @@ UserController.getUsers = async (req, res, next) => {
 UserController.getUser = async (req, res, next) => {
 	try {
 		const id = parseInt(getProp(req, 'params.id'), 10);
-		// FIXME: убрать badParameterErrorPayload после создания проверки токена
-		const badParameterErrorPayload = {
-			statusCode: 400,
-			errorMessage: USER_ERROR_MESSAGES.NO_USER_ID,
-			errorCode: BUSINESS_CONFLICT,
-			errors: [],
-		};
+		if (!id) throw new ApplicationError(notFoundErrorPayload);
 
-		if (!id) throw new ApplicationError(badParameterErrorPayload);
+		const resultData = await UserController._getEntityResponse({ id });
 
-		const user = await UserService.getUser({
-			where: { id },
-		});
+		if (!resultData) throw new ApplicationError(notFoundErrorPayload);
 
-		if (!user) throw new ApplicationError(notFoundErrorPayload);
-
-		res.status(200).send(getSuccessRes({ resultData: user }));
+		res.status(200).send(getSuccessRes({ resultData }));
 	} catch (error) {
 		next(error);
 	}
@@ -76,9 +84,12 @@ UserController.getUser = async (req, res, next) => {
  */
 UserController.createUser = async (req, res, next) => {
 	try {
-		const createdUser = await UserService.createUser({ values: req.body });
+		const body = getProp(req, 'body', {});
+		const createdUser = await UserService.createUser({ values: body });
 
-		res.status(201).send(getSuccessRes({ resultData: createdUser }));
+		const resultData = await UserController._getEntityResponse({ id: createdUser.id });
+
+		res.status(201).send(getSuccessRes({ resultData }));
 	} catch (error) {
 		next(error);
 	}
@@ -125,7 +136,7 @@ UserController.updateUser = async (req, res, next) => {
  */
 UserController.deleteUser = async (req, res, next) => {
 	try {
-		const id = parseInt(getProp(req, 'params.id', {}), 10);
+		const id = parseInt(getProp(req, 'params.userId', {}), 10);
 		// FIXME: убрать badParameterErrorPayload после создания проверки токена
 		const badParameterErrorPayload = {
 			statusCode: 400,

@@ -1,15 +1,14 @@
 /**
  * Описание: Файл содержит сервис для модуля Партнеры
  */
-import { getProp } from '@utils/helpers';
+import { getProp, basicService } from '@utils/helpers';
 import { ERROR_CODES } from '@constants';
 import { ApplicationError } from '@utils/response';
 import { UserModel } from './user.model';
 import { UserValidator } from './user.validator';
 import { USER_ERROR_MESSAGES } from './constants';
 
-// TODO: добавить basicService
-export const UserService = Object.create({});
+export const UserService = Object.create(basicService);
 
 UserService._getModel = () => UserModel;
 UserService._getModels = () => UserModel._getModels();
@@ -21,8 +20,12 @@ UserService._getModels = () => UserModel._getModels();
  */
 UserService.getUsers = async function ({
 	where = {},
+	attributes,
 } = {}) {
-	const users = await UserModel.findAndCountAll({ where });
+	const users = await UserModel.findAndCountAll({
+		where,
+		...(Array.isArray(attributes) ? { attributes } : {}),
+	});
 	return {
 		items: getProp(users, 'rows', []),
 	};
@@ -35,8 +38,12 @@ UserService.getUsers = async function ({
  */
 UserService.getUser = async function ({
 	where = {},
+	attributes,
 } = {}) {
-	return UserModel.findOne({ where });
+	return UserModel.findOne({
+		where,
+		...(Array.isArray(attributes) ? { attributes } : {}),
+	});
 };
 
 /**
@@ -45,11 +52,11 @@ UserService.getUser = async function ({
  * @returns {object}
  */
 UserService.createUser = async function ({ values = {} }) {
-	await UserValidator.createUpdateUserValidator(values);
+	const driedValues = UserService._dryPayload(values, UserService._createUpdatePayloadSchema());
 
-	// FIXME: заменить на dryPayloadValues
-	const { name, age } = values;
-	const createdUser = await UserModel.create({ name, age });
+	await UserValidator.createUpdateUserValidator(driedValues);
+
+	const createdUser = await UserModel.create(driedValues);
 
 	return createdUser;
 };
@@ -86,3 +93,14 @@ UserService.deleteUser = async function ({ id }) {
 
 	return deletedRowsCount;
 };
+
+/**
+ * Схема преобразования данных для создания и редактирования
+ * @param {boolean} sameAddress
+ * @param {string} legalAddress
+ * @returns {object}
+ */
+UserService._createUpdatePayloadSchema = () => ({
+	name: value => value,
+	age: value => value,
+});

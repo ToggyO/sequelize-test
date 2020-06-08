@@ -1,9 +1,9 @@
 /**
  * Описание: Файл содержит функции валидаторы для сервиса пользователей
  */
-const { Validator } = require('../../../utils/validation');
-const { ApplicationError } = require('../../../utils/response');
-const { ERROR_CODES } = require('../../../constants');
+import { Validator } from '@utils/validation';
+import { ApplicationError } from '@utils/response';
+import { ERROR_CODES } from '@constants';
 
 export const UserValidator = Object.create({});
 

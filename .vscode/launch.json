@@ -12,8 +12,9 @@
         "<node_internals>/",
         "${workspaceRoot}/node_modules//*.js"
       ],
-      "program": "${workspaceFolder}/src/index.js",
-      // "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/babel-node",
+      "program": "${workspaceFolder}/src/register.js",
+			"runtimeExecutable": "${workspaceRoot}/node_modules/.bin/babel-node",
+			"runtimeArgs": ["--nolazy"],
       "sourceMaps": true
     }
   ]

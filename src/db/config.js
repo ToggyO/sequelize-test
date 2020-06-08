@@ -1,7 +1,7 @@
 /**
  * Описание: конфиг для корректной работы команды миграции и seed для sequelize-cli
  */
-const config = require('../config');
+import config from '@config';
 
 module.exports = {
 	development: {

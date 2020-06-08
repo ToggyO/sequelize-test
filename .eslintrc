@@ -11,6 +11,7 @@
     "ecmaVersion": 2018
   },
   "rules": {
+		"arrow-parens": "off",
     "no-bitwise": ["error", { "allow": ["~"] }],
     "no-unused-vars": ["error", { "vars": "all", "args": "after-used", "ignoreRestSiblings": true }],
     "max-len": ["error", { "code": 120 }],

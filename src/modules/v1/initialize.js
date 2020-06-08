@@ -57,7 +57,7 @@ export const initializeSwagger = ({ basePath }) => {
 		...require('./user/swagger.json').schemas,
 		/* eslint-enable global-require */
 	};
-	console.log(modulesSwaggerSchemes);
+
 	const swaggerOptions = {
 		swaggerDefinition: {
 			openapi: '3.0.0',
@@ -82,7 +82,7 @@ export const initializeSwagger = ({ basePath }) => {
 		},
 		apis: [`${process.cwd()}/src/modules/v1/*/*.router.js`],
 	};
-
+	// console.log(swaggerJsdoc(swaggerOptions).paths['/users'].post)
 	const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
 	return swaggerUi.setup(swaggerSpec);

@@ -37,4 +37,16 @@ export const VALIDATION_ERRORS = {
 		errorCode: POSSIBLE_VALIDATION_CODES.validation_is_number_field,
 		errorMessage: `Field "${field}" must be a number`,
 	}),
+	invalidEmailFormat: ({ field }) => ({
+		field,
+		errorCode: POSSIBLE_VALIDATION_CODES.validation_invalid_email_format,
+		errorMessage: 'Invalid email format',
+	}),
+	isInvalidPasswordFormat: ({ field }) => ({
+		field,
+		errorCode: POSSIBLE_VALIDATION_CODES.validation_invalid_password_format,
+		errorMessage: 'Invalit password format.'
+			+ 'Password must include at least one digit, at least one latin letter in an upper case,'
+			+ 'at least one latin letter in a lower case and contain at least 8 characters',
+	}),
 };

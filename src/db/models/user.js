@@ -10,16 +10,31 @@
  */
 const scheme = (sequelize, DataTypes) => ({
 	id: {
-		type: DataTypes.INTEGER,
+		type: DataTypes.BIGINT,
 		autoIncrement: true,
 		primaryKey: true,
 		allowNull: false,
 	},
+	email: {
+		type: DataTypes.STRING(45),
+		unique: true,
+		allowNull: false,
+		validate: {
+			isEmail: true,
+		},
+	},
+	passwordHash: {
+		type: DataTypes.STRING,
+		allowNull: false,
+		_isHidden: true,
+	},
 	name: {
+		field: 'name',
 		type: DataTypes.STRING,
 		allowNull: false,
 	},
 	age: {
+		field: 'age',
 		type: DataTypes.INTEGER,
 		allowNull: false,
 	},

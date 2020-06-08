@@ -2,8 +2,8 @@
  * Описание: Файл содержит класс хелпер (и функцию, инициализирующую его)
  * для валидации входных параметров запросов
  */
+import validator from 'validator';
 import { VALIDATION_ERRORS } from '@constants';
-// import { VALIDATION_ERRORS } from '@constants/validations-errors';
 
 export class Validator {
 	constructor({
@@ -95,6 +95,36 @@ export class Validator {
 			this.#setNewError(VALIDATION_ERRORS.isNumber({ field: this.field }));
 		}
 		return this;
+	};
+
+	/**
+   * Валидация: корректный емейл
+   * @returns {this}
+   */
+	email = () => {
+		if (this.error || this.#shouldReturnEmptyError) return this;
+		if (!validator.isEmail(this.value)) {
+			this.#setNewError(VALIDATION_ERRORS.invalidEmailFormat({ field: this.field }));
+		}
+		return this;
+	};
+
+	/**
+   * Валидация: формат пароля
+   * @returns {this}
+   */
+	password = () => {
+		if (this.error || this._shouldReturnEmptyError) return this;
+
+		const patternNums = /[0-9]+/;
+		const patternLowSyms = /[a-z]+/;
+		const patternUppSyms = /[A-Z]+/;
+		const patternMinLen = /.{8,}/;
+		const isValid = (patternNums.test(this.value) && patternLowSyms.test(this.value) && patternUppSyms.test(this.value) && patternMinLen.test(this.value)); // eslint-disable-line max-len
+
+		if (!isValid) {
+			this._setNewError(VALIDATION_ERRORS.invalidPasswordFormat({ field: this.field }));
+		}
 	};
 }
 
