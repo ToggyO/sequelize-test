@@ -114,16 +114,18 @@ export class Validator {
    * @returns {this}
    */
 	password = () => {
-		if (this.error || this._shouldReturnEmptyError) return this;
+		if (this.error || this.#shouldReturnEmptyError) return this;
 
-		const patternNums = /[0-9]+/;
-		const patternLowSyms = /[a-z]+/;
-		const patternUppSyms = /[A-Z]+/;
-		const patternMinLen = /.{8,}/;
-		const isValid = (patternNums.test(this.value) && patternLowSyms.test(this.value) && patternUppSyms.test(this.value) && patternMinLen.test(this.value)); // eslint-disable-line max-len
+		// const patternNums = /[0-9]+/;
+		// const patternLowSyms = /[a-z]+/;
+		// const patternUppSyms = /[A-Z]+/;
+		// const patternMinLen = /.{8,}/;
+		// const isValid = (patternNums.test(this.value) && patternLowSyms.test(this.value)
+		// && patternUppSyms.test(this.value) && patternMinLen.test(this.value)); // eslint-disable-line max-len
+		const isValid = /^[0-9a-zA-Z~!@#$%^&*_\-+=`|(){}[\]:;"'<>,.?/]+$/.test(this.value);
 
 		if (!isValid) {
-			this._setNewError(VALIDATION_ERRORS.invalidPasswordFormat({ field: this.field }));
+			this.#setNewError(VALIDATION_ERRORS.isInvalidPasswordFormat({ field: this.field }));
 		}
 	};
 }

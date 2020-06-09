@@ -25,7 +25,8 @@
     "func-names": "off",
     "consistent-return": "off",
     "indent": [1, "tab"],
-    "no-tabs": "off"
+    "no-tabs": "off",
+    "no-mixed-spaces-and-tabs": "off"
   },
   "settings": {
     "import/resolver": {
