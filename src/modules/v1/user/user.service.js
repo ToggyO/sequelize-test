@@ -1,12 +1,9 @@
 /**
  * Описание: Файл содержит сервис для модуля Партнеры
  */
-import { getProp, basicService } from '@utils/helpers';
-import { ERROR_CODES } from '@constants';
-import { ApplicationError } from '@utils/response';
+import { getProp, basicService, customCrypto } from '@utils/helpers';
 import { UserModel } from './user.model';
 import { UserValidator } from './user.validator';
-import { USER_ERROR_MESSAGES } from './constants';
 
 export const UserService = Object.create(basicService);
 
@@ -56,7 +53,20 @@ UserService.createUser = async function ({ values = {} }) {
 
 	await UserValidator.createUpdateUserValidator(driedValues);
 
-	const createdUser = await UserModel.create(driedValues);
+	const withHashedData = (data) => ({
+		...data,
+		...(values.password ? customCrypto.hashPassword(values.password) : {}),
+	});
+
+	const options = {
+		model: UserModel,
+		modelSchemaKey: '_isCreatable',
+		callback: withHashedData,
+	};
+
+	const allowedValues = UserService._useSchema(driedValues, options);
+
+	const createdUser = await UserModel.create(allowedValues);
 
 	return createdUser;
 };
@@ -101,6 +111,8 @@ UserService.deleteUser = async function ({ id }) {
  * @returns {object}
  */
 UserService._createUpdatePayloadSchema = () => ({
+	email: value => value,
+	password: value => value,
 	name: value => value,
 	age: value => value,
 });

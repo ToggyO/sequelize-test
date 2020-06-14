@@ -127,7 +127,6 @@ export class Validator {
 		if (!isValid) {
 			this.#setNewError(VALIDATION_ERRORS.isInvalidPasswordFormat({ field: this.field }));
 		}
+		return this;
 	};
 }
-
-module.exports.Validator = Validator;

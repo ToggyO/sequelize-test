@@ -6,7 +6,9 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
 
 import config from '@config';
+import { ERROR_CODES } from '@constants';
 // инициализаторы роутинга
+import { createRouter as createAuthRouter } from './auth/auth.router';
 import { createRouter as createUserRouter } from './user/user.router';
 // инициализаторы моделей
 import { initializeModel as initializeUserModel } from './user/user.model';
@@ -19,6 +21,7 @@ export const createV1Router = () => {
 	const router = Router();
 
 	router.use('/users', createUserRouter());
+	router.use('/auth', createAuthRouter());
 
 	return router;
 };
@@ -54,6 +57,7 @@ export const initializeSwagger = ({ basePath }) => {
 
 	const modulesSwaggerSchemes = {
 		/* eslint-disable global-require */
+		...require('./auth/swagger.json').schemas,
 		...require('./user/swagger.json').schemas,
 		/* eslint-enable global-require */
 	};
@@ -74,15 +78,62 @@ export const initializeSwagger = ({ basePath }) => {
 				},
 			],
 			components: {
+				securitySchemes: {
+					BearerAuth: {
+						type: 'http',
+						scheme: 'bearer',
+						bearerFormat: 'JWT',
+					},
+				},
 				schemas: {
 					...modulesSwaggerSchemes,
-					// successResponse: {}
+					unauthorizedResponse: {
+						description: 'Unauthorized',
+						type: 'object',
+						properties: {
+							errorCode: { type: 'number', example: ERROR_CODES.security__invalid_token_error },
+							errorMessage: { type: 'string' },
+						},
+					},
+					incorrectParamsResponse: {
+						description: 'Invalid income parameters format',
+						type: 'object',
+						properties: {
+							errorCode: { type: 'number', example: ERROR_CODES.validation },
+							errorMessage: { type: 'string' },
+							errors: { items: { type: 'string' } },
+						},
+					},
+					forbiddenResponse: {
+						description: 'Permission denied',
+						type: 'object',
+						properties: {
+							errorCode: { type: 'number', example: ERROR_CODES.security__no_permissions },
+							errorMessage: { type: 'string' },
+						},
+					},
+					notAcceptableResponse: {
+						description: 'Request cannot be completed',
+						type: 'object',
+						properties: {
+							errorCode: { type: 'number', example: ERROR_CODES.notAcceptable },
+							errorMessage: { type: 'string' },
+						},
+					},
+					notFoundResponse: {
+						description: 'Not found',
+						type: 'object',
+						properties: {
+							errorCode: { type: 'number', example: ERROR_CODES.not_found },
+							errorMessage: { type: 'string' },
+						},
+					},
 				},
 			},
 		},
 		apis: [`${process.cwd()}/src/modules/v1/*/*.router.js`],
 	};
-	// console.log(swaggerJsdoc(swaggerOptions).paths['/users'].post)
+
 	const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
 	return swaggerUi.setup(swaggerSpec);

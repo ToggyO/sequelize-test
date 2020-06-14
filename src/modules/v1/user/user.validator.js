@@ -4,6 +4,7 @@
 import { Validator } from '@utils/validation';
 import { ApplicationError } from '@utils/response';
 import { ERROR_CODES } from '@constants';
+import { USER_ERROR_MESSAGES } from './constants';
 
 export const UserValidator = Object.create({});
 
@@ -18,7 +19,7 @@ UserValidator.createUpdateUserValidator = async function (values = {}) {
 	if (errors.length) {
 		throw new ApplicationError({
 			statusCode: 400,
-			errorMessage: 'User creation error',
+			errorMessage: USER_ERROR_MESSAGES.USER_CREATION_ERROR,
 			errorCode: ERROR_CODES.validation,
 			errors,
 		});

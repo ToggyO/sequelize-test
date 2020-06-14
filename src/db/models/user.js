@@ -18,25 +18,37 @@ const scheme = (sequelize, DataTypes) => ({
 	email: {
 		type: DataTypes.STRING(45),
 		unique: true,
-		allowNull: false,
+		// allowNull: false,
 		validate: {
 			isEmail: true,
 		},
+		_isCreatable: true,
 	},
 	passwordHash: {
 		type: DataTypes.STRING,
-		allowNull: false,
+		// allowNull: false,
 		_isHidden: true,
+		_isCreatable: true,
+	},
+	salt: {
+		type: DataTypes.STRING,
+		// allowNull: false,
+		_isHidden: true,
+		_isCreatable: true,
 	},
 	name: {
 		field: 'name',
 		type: DataTypes.STRING,
 		allowNull: false,
+		_isEditable: true,
+		_isCreatable: true,
 	},
 	age: {
 		field: 'age',
 		type: DataTypes.INTEGER,
 		allowNull: false,
+		_isEditable: true,
+		_isCreatable: true,
 	},
 	createdAt: {
 		field: 'created_at',

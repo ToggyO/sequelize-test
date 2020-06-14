@@ -1,19 +1,39 @@
 {
   "schemas": {
-    "name": {
-      "type": "string"
-    },
-    "age": {
-      "type": "number"
-    },
-    "User": {
+    "CreateUser": {
       "type": "object",
       "properties": {
+				"email": {
+					"type": "string"
+				},
+				"password": {
+					"type": "string"
+				},
         "name": {
-          "$ref": "#/components/schemas/name"
+					"type": "string"
+				},
+				"age": {
+					"type": "number"
+				}
+      }
+		},
+		"User": {
+      "type": "object",
+      "properties": {
+				"id": {
+					"type": "number"
+				},
+        "name": {
+					"type": "string"
+				},
+				"age": {
+					"type": "number"
+				},
+				"createdAt": {
+          "type": "string"
         },
-        "age": {
-          "$ref": "#/components/schemas/age"
+        "updatedAt": {
+          "type": "string"
         }
       }
     }

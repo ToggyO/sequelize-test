@@ -3,8 +3,9 @@
  */
 import { Router } from 'express';
 
+import { asyncWrapper } from '@utils/helpers';
+import { authenticate } from 'utils/authentication';
 import { UserController } from './user.controller';
-import { asyncWrapper } from '../../../utils/helpers';
 
 /**
  * Роутер: Users
@@ -22,6 +23,8 @@ export const createRouter = () => {
 	 *          - Users
 	 *        description: Get users
 	 *        summary: Get list of users
+	 *        security:
+	 *          - BearerAuth: []
 	 *        produces:
 	 *          - application/json
 	 *        responses:
@@ -38,8 +41,20 @@ export const createRouter = () => {
 	 *                    resultData:
 	 *                      type: object
 	 *                      $ref: '#/components/schemas/User'
+	 *          401:
+	 *            content:
+	 *              application/json:
+	 *                schema:
+	 *                  type: object
+	 *                  $ref: '#/components/schemas/unauthorizedResponse'
+	 *          403:
+	 *            content:
+	 *              application/json:
+	 *                schema:
+	 *                  type: object
+	 *                  $ref: '#/components/schemas/forbiddenResponse'
 	 */
-	router.get('/', asyncWrapper(UserController.getUsers));
+	router.get('/', asyncWrapper(authenticate(null)), asyncWrapper(UserController.getUsers));
 
 	/**
 	 * Get list user by id
@@ -51,6 +66,8 @@ export const createRouter = () => {
 	 *          - Users
 	 *        description: Get user by id
 	 *        summary: Get user by id
+	 *        security:
+	 *          - BearerAuth: []
 	 *        produces:
 	 *          - application/json
 	 *        parameters:
@@ -73,8 +90,26 @@ export const createRouter = () => {
 	 *                    resultData:
 	 *                      type: object
 	 *                      $ref: '#/components/schemas/User'
+	 *          401:
+	 *            content:
+	 *              application/json:
+	 *                schema:
+	 *                  type: object
+	 *                  $ref: '#/components/schemas/unauthorizedResponse'
+	 *          403:
+	 *            content:
+	 *              application/json:
+	 *                schema:
+	 *                  type: object
+	 *                  $ref: '#/components/schemas/forbiddenResponse'
+	 *          404:
+	 *            content:
+	 *              application/json:
+	 *                schema:
+	 *                  type: object
+	 *                  $ref: '#/components/schemas/notFoundResponse'
 	 */
-	router.get('/:id', asyncWrapper(UserController.getUser));
+	router.get('/:id', asyncWrapper(authenticate(null)), asyncWrapper(UserController.getUser));
 
 	/**
 	 * Create user
@@ -86,11 +121,13 @@ export const createRouter = () => {
 	 *          - Users
 	 *        description: Create user
 	 *        summary: Create user
+	 *        security:
+	 *          - BearerAuth: []
 	 *        requestBody:
 	 *          content:
 	 *            application/json:
 	 *              schema:
-	 *                $ref: '#/components/schemas/User'
+	 *                $ref: '#/components/schemas/CreateUser'
 	 *        responses:
 	 *          201:
 	 *            description: Successful operation
@@ -105,8 +142,27 @@ export const createRouter = () => {
 	 *                    resultData:
 	 *                      type: object
 	 *                      $ref: '#/components/schemas/User'
+	 *          400':
+	 *            description: Bad parameters
+	 *            content:
+	 *              application/json:
+	 *                schema:
+	 *                  type: object
+	 *                  $ref: '#/components/schemas/incorrectParamsResponse'
+	 *          401:
+	 *            content:
+	 *              application/json:
+	 *                schema:
+	 *                  type: object
+	 *                  $ref: '#/components/schemas/unauthorizedResponse'
+	 *          403:
+	 *            content:
+	 *              application/json:
+	 *                schema:
+	 *                  type: object
+	 *                  $ref: '#/components/schemas/forbiddenResponse'
 	 */
-	router.post('/', asyncWrapper(UserController.createUser));
+	router.post('/', asyncWrapper(authenticate(null)), asyncWrapper(UserController.createUser));
 
 	/**
 	 * Update current user
@@ -118,11 +174,13 @@ export const createRouter = () => {
 	 *          - Users
 	 *        description: Update current user
 	 *        summary: Update current user
+	 *        security:
+	 *          - BearerAuth: []
 	 *        requestBody:
 	 *          content:
 	 *            application/json:
 	 *              schema:
-	 *                $ref: '#/components/schemas/User'
+	 *                $ref: '#/components/schemas/CreateUser'
 	 *        responses:
 	 *          200:
 	 *            description: Successful operation
@@ -137,8 +195,27 @@ export const createRouter = () => {
 	 *                    resultData:
 	 *                      type: object
 	 *                      $ref: '#/components/schemas/User'
+	 *          400':
+	 *            description: Bad parameters
+	 *            content:
+	 *              application/json:
+	 *                schema:
+	 *                  type: object
+	 *                  $ref: '#/components/schemas/incorrectParamsResponse'
+	 *          401:
+	 *            content:
+	 *              application/json:
+	 *                schema:
+	 *                  type: object
+	 *                  $ref: '#/components/schemas/unauthorizedResponse'
+	 *          403:
+	 *            content:
+	 *              application/json:
+	 *                schema:
+	 *                  type: object
+	 *                  $ref: '#/components/schemas/forbiddenResponse'
 	 */
-	router.put('/:id', asyncWrapper(UserController.updateUser));
+	router.put('/:id', asyncWrapper(authenticate(null)), asyncWrapper(UserController.updateUser));
 
 	/**
 	 * Delete user by id
@@ -150,6 +227,8 @@ export const createRouter = () => {
 	 *          - Users
 	 *        description: Delete user by id
 	 *        summary: Delete user by id
+	 *        security:
+	 *          - BearerAuth: []
 	 *        parameters:
    *          - in: path
    *            name: id
@@ -159,8 +238,20 @@ export const createRouter = () => {
 	 *        responses:
 	 *          200:
 	 *            description: Successful operation
+	 *          401:
+	 *            content:
+	 *              application/json:
+	 *                schema:
+	 *                  type: object
+	 *                  $ref: '#/components/schemas/unauthorizedResponse'
+	 *          403:
+	 *            content:
+	 *              application/json:
+	 *                schema:
+	 *                  type: object
+	 *                  $ref: '#/components/schemas/forbiddenResponse'
 	 */
-	router.delete('/:id', asyncWrapper(UserController.deleteUser));
+	router.delete('/:id', asyncWrapper(authenticate(null)), asyncWrapper(UserController.deleteUser));
 
 	return router;
 };

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --inspect-brk src/register.js",
+    "dev": "nodemon --inspect src/register.js",
     "db-migrate": "sequelize db:migrate",
     "db-migrate:undo": "sequelize db:migrate:undo:all",
     "db-seed": "sequelize db:seed:all",
