@@ -13,6 +13,7 @@ UserService._getModels = () => UserModel._getModels();
 /**
  * Получить список пользователей
  * @param {object} where
+ * @param {array} attributes
  * @returns {Promise<object>}
  */
 UserService.getUsers = async function ({
@@ -31,6 +32,7 @@ UserService.getUsers = async function ({
 /**
  * Получить пользователя
  * @param {object} where
+ * @param {array} attributes
  * @returns {Promise<object>}
  */
 UserService.getUser = async function ({
@@ -106,8 +108,6 @@ UserService.deleteUser = async function ({ id }) {
 
 /**
  * Схема преобразования данных для создания и редактирования
- * @param {boolean} sameAddress
- * @param {string} legalAddress
  * @returns {object}
  */
 UserService._createUpdatePayloadSchema = () => ({
