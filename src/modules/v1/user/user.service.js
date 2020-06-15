@@ -19,13 +19,18 @@ UserService._getModels = () => UserModel._getModels();
 UserService.getUsers = async function ({
 	where = {},
 	attributes,
+	pagination = {},
 } = {}) {
 	const users = await UserModel.findAndCountAll({
 		where,
 		...(Array.isArray(attributes) ? { attributes } : {}),
+		...pagination,
 	});
+	const items = getProp(users, 'rows', []);
+	const count = getProp(users, 'count', []);
 	return {
-		items: getProp(users, 'rows', []),
+		items,
+		...(UserService._getPaginationResponse({ count }, pagination)),
 	};
 };
 

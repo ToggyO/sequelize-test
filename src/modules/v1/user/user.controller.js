@@ -45,9 +45,17 @@ UserController._getEntityResponse = async ({ id }) => {
  */
 UserController.getUsers = async (req, res, next) => {
 	try {
-		const users = await UserService.getUsers({});
+		const query = getProp(req, 'query', {});
+		const pagination = UserService._getPagination({ query });
 
-		res.status(200).send(getSuccessRes({ resultData: users }));
+		const userAttributes = UserService._getModelAttributes({ model: UserModel })
+
+		const resultData = await UserService.getUsers({
+			pagination,
+			attributes: userAttributes,
+		});
+
+		res.status(200).send(getSuccessRes({ resultData }));
 	} catch (error) {
 		next(error);
 	}

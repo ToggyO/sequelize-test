@@ -1,7 +1,7 @@
-
 /**
  * Описание: Конструктор сервисов, который используется для инициализации сервисов модулей
  */
+import { getProp, isObjectEmpty } from './common';
 
 export const basicService = {
 	/**
@@ -81,4 +81,42 @@ export const basicService = {
 		);
 	},
 
+	/**
+   * Использовать форматированный параметры пагинации `offset`, `limit`
+   * @param {object} query
+   * @returns {{offset: number, limit: *}|*}
+   */
+	_getPagination: ({ query = {} } = {}) => {
+		let page = +getProp(query, 'page', 0);
+		let pageSize = +getProp(query, 'pageSize', 0);
+
+		if (Number.isNaN(page) || page < 0) { page = 0; }
+		if (Number.isNaN(pageSize) || pageSize <= 0) { pageSize = 10; }
+
+		return {
+			offset: page * pageSize,
+			limit: pageSize,
+		};
+	},
+
+	/**
+   * Формат ответа с пагинацией
+   * @param result
+   * @param pagination
+   * @returns {{}|{pagination: {total: *}}}
+   * @private
+   */
+	_getPaginationResponse: (result = {}, pagination = {}) => {
+		if (isObjectEmpty(pagination)) {
+			return {};
+		}
+
+		return {
+			pagination: {
+				page: Math.abs(pagination.offset / pagination.limit),
+				pageSize: pagination.limit,
+				total: getProp(result, 'count', 0),
+			},
+		};
+	},
 };

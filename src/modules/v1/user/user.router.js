@@ -27,6 +27,9 @@ export const createRouter = () => {
 	 *          - BearerAuth: []
 	 *        produces:
 	 *          - application/json
+	 *        parameters:
+   *          - $ref: '#/components/schemas/paginationPage'
+   *          - $ref: '#/components/schemas/paginationSize'
 	 *        responses:
 	 *          200:
 	 *            description: Successful operation
@@ -40,7 +43,14 @@ export const createRouter = () => {
 	 *                      example: 0
 	 *                    resultData:
 	 *                      type: object
-	 *                      $ref: '#/components/schemas/User'
+	 *                      properties:
+	 *                        items:
+	 *                          type: array
+	 *                          items:
+	 *                            $ref: '#/components/schemas/User'
+   *                        pagination:
+   *                          type: object
+   *                          $ref: '#/components/schemas/paginationResponse'
 	 *          401:
 	 *            content:
 	 *              application/json:

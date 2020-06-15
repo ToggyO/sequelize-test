@@ -74,7 +74,7 @@ export const initializeSwagger = ({ basePath }) => {
 			servers: [
 				{
 					url: `http://${config.HOST}:${config.PORT}`,
-					description: 'Local server',
+					description: `${isProduction ? 'Production' : 'Local'} server`,
 				},
 			],
 			components: {
@@ -87,6 +87,43 @@ export const initializeSwagger = ({ basePath }) => {
 				},
 				schemas: {
 					...modulesSwaggerSchemes,
+					paginationPage: {
+						in: 'query',
+						name: 'page',
+						description: 'Page number',
+						required: false,
+						schema: {
+							type: 'integer',
+							minimum: 0,
+							// default: 0,
+						},
+					},
+					paginationSize: {
+						in: 'query',
+						name: 'pageSize',
+						description: 'Items per page',
+						required: false,
+						schema: {
+							type: 'integer',
+							minimum: 1,
+							maximum: 100,
+							// default: 10,
+						},
+					},
+					paginationResponse: {
+						type: 'object',
+						properties: {
+							page: {
+								type: 'number',
+							},
+							pageSize: {
+								type: 'number',
+							},
+							total: {
+								type: 'number',
+							},
+						},
+					},
 					unauthorizedResponse: {
 						description: 'Unauthorized',
 						type: 'object',
