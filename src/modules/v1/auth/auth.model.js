@@ -5,7 +5,14 @@ import { Model, DataTypes } from 'sequelize';
 import scheme from '@db/models/refreshToken';
 import { db } from '@db';
 
-export class AuthModel extends Model {}
+export class AuthModel extends Model {
+	static getRefreshToken = ({ where = {}, attributes, include }) => (
+		AuthModel.findOne({
+			where,
+			...(Array.isArray(attributes) ? { attributes } : {}),
+			...(Array.isArray(include) ? { include } : {}),
+		}));
+};
 
 export const initializeModel = () => {
 	const sequelize = db.getSequelizeInstance();

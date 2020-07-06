@@ -7,7 +7,7 @@ const CRON_PER_HOUR = '0 59 * * * *';
 const CRON_PER_DAY = '0 0 23 * * *';
 
 export async function cleanUpInvalidTokenHandler() {
-
+	
 }
 
 export async function runCleanUpInvalidTokensJob({ app, cronTime }) {

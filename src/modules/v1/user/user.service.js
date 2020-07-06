@@ -19,11 +19,13 @@ UserService._getModels = () => UserModel._getModels();
 UserService.getUsers = async function ({
 	where = {},
 	attributes,
+	include,
 	pagination = {},
 } = {}) {
 	const users = await UserModel.findAndCountAll({
 		where,
 		...(Array.isArray(attributes) ? { attributes } : {}),
+		...(Array.isArray(include) ? { include } : {}),
 		...pagination,
 	});
 	const items = getProp(users, 'rows', []);
@@ -43,6 +45,7 @@ UserService.getUsers = async function ({
 UserService.getUser = async function ({
 	where = {},
 	attributes,
+	include,
 } = {}) {
 	return UserModel.findOne({
 		where,
@@ -50,6 +53,7 @@ UserService.getUser = async function ({
 		// 	'refreshToken',
 		// ],
 		...(Array.isArray(attributes) ? { attributes } : {}),
+		...(Array.isArray(include) ? { include } : {}),
 	});
 };
 

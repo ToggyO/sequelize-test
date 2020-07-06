@@ -64,6 +64,10 @@ AuthService.login = async (values = {}) => {
 	return authData;
 };
 
+AuthService.refreshToken = async (token) => {
+	await 
+}
+
 /**
  * Схема преобразования данных для аутентификации пользователя
  */
