@@ -34,6 +34,16 @@ export class CustomDate extends Date {
 	};
 
 	/**
+	 * Метод для добавлнеия дней к текущей дате
+	 * @param {number} days - дни (отрицательное, чтобы вычесть часы)
+	 * @returns {CustomDate} - Результат
+	 */
+	addDays = days => {
+		this.setDate(this.getDate() + days);
+		return this;
+	};
+
+	/**
 	 * Метод для добавлнеия месяцев к текущей дате
 	 * @param {number} months - количество месяцев (отрицательное, чтобы вычесть часы)
 	 * @returns {CustomDate} - Результат

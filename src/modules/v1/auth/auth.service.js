@@ -46,11 +46,19 @@ AuthService.login = async (values = {}) => {
 		throw new ApplicationError(invalidCredentialsErrorPayload);
 	}
 
+	const tokens = generateToken({ userId: user.id, login: user.email });
+
+	await user.createRefreshToken({
+		userId: user.id,
+		refreshToken: tokens.refreshToken,
+		expiresIn: tokens.refreshExpire,
+	});
+
 	const authData = {
 		id: user.id,
 		email: user.email,
 		// role: user.role,
-		tokens: generateToken({ userId: user.id, login: user.email }),
+		tokens,
 	};
 
 	return authData;

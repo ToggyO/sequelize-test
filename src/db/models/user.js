@@ -60,6 +60,11 @@ const scheme = (sequelize, DataTypes) => ({
 		type: DataTypes.DATE,
 		defaultValue: sequelize.fn('NOW'),
 	},
+	// refreshTokens: {
+	// 	field: 'refresh_tokens',
+	// 	type: DataTypes.ARRAY(DataTypes.STRING),
+	// 	defaultValue: [],
+	// },
 });
 
 module.exports = scheme;

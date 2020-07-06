@@ -26,6 +26,14 @@ export const initializeModel = () => {
    * @param models
    */
 	UserModel.onAllModelsInitialized = (models = {}) => {
+		const { AuthModel } = models;
+
+		UserModel.hasMany(AuthModel, {
+			as: 'refreshToken',
+		});
+		console.log(UserModel.associations);
+
+
 		UserModel._getModels = () => models;
 	};
 

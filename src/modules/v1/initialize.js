@@ -12,6 +12,7 @@ import { createRouter as createAuthRouter } from './auth/auth.router';
 import { createRouter as createUserRouter } from './user/user.router';
 // инициализаторы моделей
 import { initializeModel as initializeUserModel } from './user/user.model';
+import { initializeModel as initializeAuthModel } from './auth/auth.model';
 
 /**
  * Инициализация роутинга
@@ -35,6 +36,7 @@ export const initializeModels = ({ app } = {}) => {
 	const models = {};
 
 	models.UserModel = initializeUserModel();
+	models.AuthModel = initializeAuthModel();
 
 	Object.keys(models).forEach((modelKey) => {
 		// Обратный вызов модели на событии полной готовности всех доступных моделей

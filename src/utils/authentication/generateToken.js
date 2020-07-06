@@ -22,10 +22,11 @@ export const generateToken = ({ userId, login }) => {
 			login,
 			type: 'access',
 		}, JWT_SECRET, { expiresIn: JWT_ACCESS_EXPIRES_IN }),
+		accessExpire: new CustomDate().addHours(1).toISOString(),
 		refreshToken: jwt.sign({
 			userId,
 			type: 'refresh',
 		}, JWT_SECRET, { expiresIn: JWT_REFRESH_EXPIRES_IN }),
-		expire: new CustomDate().addHours(1).toISOString(),
+		refreshExpire: new CustomDate().addDays(7).toISOString(),
 	};
 };
