@@ -38,7 +38,6 @@ export const initializeModel = () => {
 			as: 'user',
 		});
 
-		console.log(AuthModel.associations);
 		AuthModel._getModels = () => models;
 	};
 

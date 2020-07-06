@@ -46,6 +46,9 @@ UserService.getUser = async function ({
 } = {}) {
 	return UserModel.findOne({
 		where,
+		// include: [
+		// 	'refreshToken',
+		// ],
 		...(Array.isArray(attributes) ? { attributes } : {}),
 	});
 };

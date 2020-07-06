@@ -23,8 +23,6 @@ export const createRouter = () => {
 	 *          - Users
 	 *        description: Get users
 	 *        summary: Get list of users
-	 *        security:
-	 *          - BearerAuth: []
 	 *        produces:
 	 *          - application/json
 	 *        parameters:
@@ -64,7 +62,7 @@ export const createRouter = () => {
 	 *                  type: object
 	 *                  $ref: '#/components/schemas/forbiddenResponse'
 	 */
-	router.get('/', asyncWrapper(authenticate(null)), asyncWrapper(UserController.getUsers));
+	router.get('/', asyncWrapper(UserController.getUsers));
 
 	/**
 	 * Get list user by id
@@ -172,7 +170,7 @@ export const createRouter = () => {
 	 *                  type: object
 	 *                  $ref: '#/components/schemas/forbiddenResponse'
 	 */
-	router.post('/', asyncWrapper(authenticate(null)), asyncWrapper(UserController.createUser));
+	router.post('/', asyncWrapper(UserController.createUser));
 
 	/**
 	 * Update current user

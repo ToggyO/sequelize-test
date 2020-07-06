@@ -31,8 +31,6 @@ export const initializeModel = () => {
 		UserModel.hasMany(AuthModel, {
 			as: 'refreshToken',
 		});
-		console.log(UserModel.associations);
-
 
 		UserModel._getModels = () => models;
 	};
