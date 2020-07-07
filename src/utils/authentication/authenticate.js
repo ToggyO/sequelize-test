@@ -16,6 +16,24 @@ const unauthorizedErrorPayload = {
 };
 
 /**
+ * Проверка токена на валидность
+ * @param {string} token - проверяемый токен
+ * @returns {object} - результат проверки
+ */
+export const checkToken = async (token) => {
+	const { JWT_SECRET } = config;
+	try {
+		return jwt.verify(token, JWT_SECRET);
+	} catch (error) {
+		if (error.name === 'TokenExpiredError' || error.name === 'JsonWebTokenError') {
+			throw new ApplicationError(unauthorizedErrorPayload);
+		}
+
+		throw error;
+	}
+};
+
+/**
  * Создание промежуточного обработчика для проверки прав доступа к роуту
  * @param {array|null} allowedRoles - массив разрешенных ролей. Если null, то разрешены все роли.
  * @returns {function} - промежуточный обработчик
@@ -29,17 +47,20 @@ export const authenticate = (allowedRoles = []) => async (req, res, next) => {
 		throw new ApplicationError(unauthorizedErrorPayload);
 	}
 
-	try {
-		const decoded = await jwt.verify(accessToken, JWT_SECRET);
-		const userData = await UserController._getEntityResponse({ id: decoded.userId });
-		req._userData = userData.dataValues;
-	} catch (error) {
-		if (error.name === 'TokenExpiredError' || error.name === 'JsonWebTokenError') {
-			throw new ApplicationError(unauthorizedErrorPayload);
-		}
+	// try {
+	// 	const decoded = await jwt.verify(accessToken, JWT_SECRET);
+		// const userData = await UserController._getEntityResponse({ id: decoded.userId });
+		// req._userData = userData.dataValues;
+	// } catch (error) {
+	// 	if (error.name === 'TokenExpiredError' || error.name === 'JsonWebTokenError') {
+	// 		throw new ApplicationError(unauthorizedErrorPayload);
+	// 	}
 
-		throw error;
-	}
+	// 	throw error;
+	// }
+	const { userId } = await checkToken(accessToken);
+	const userData = await UserController._getEntityResponse({ id: userId });
+	req._userData = userData.dataValues;
 
 	// if (allowedRoles !== null && !allowedRoles.includes(userData.role)) {
 	// 	throw new ApplicationError({
@@ -67,20 +88,3 @@ export const authenticate = (allowedRoles = []) => async (req, res, next) => {
 // Expired refresh token
 // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInR5cGUiOiJyZWZyZXNoIiwiaWF0IjoxNTk0MDkwOTk1LCJleHAiOjE1OTQwOTExMTV9.FbMek0S8Li_-HMbOYyKv84lZ77b2BXk_s4fCudHVeU4
 
-/**
- * Проверка токена на валидность
- * @param {string} token - проверяемый токен
- * @returns {object} - результат проверки
- */
-export const checkToken = async (token) => {
-	const { JWT_SECRET } = config;
-	try {
-		return jwt.verify(token, JWT_SECRET);
-	} catch (error) {
-		if (error.name === 'TokenExpiredError' || error.name === 'JsonWebTokenError') {
-			throw new ApplicationError(unauthorizedErrorPayload);
-		}
-
-		throw error;
-	}
-};

@@ -25,14 +25,14 @@ const scheme = (sequelize, DataTypes) => ({
 		field: 'refresh_token',
 		type: DataTypes.STRING,
 		allowNull: false,
-		_isCreatale: true,
+		_isCreatable: true,
 		_isEditable: true,
 	},
 	expiresIn: {
 		field: 'expires_in',
 		type: DataTypes.DATE,
 		allowNull: false,
-		_isCreatale: true,
+		_isCreatable: true,
 		_isEditable: true,
 	},
 	createdAt: {

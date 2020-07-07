@@ -82,13 +82,17 @@ AuthService.login = async (values = {}) => {
 		tokens: {
 			accessToken,
 			expire: accessExpire,
-			refreshToken,
+			refreshToken: newRefreshToken,
 		},
 	};
 
 	return authData;
 };
 
+/**
+ * Обновление аксесс токена
+ * @returns {Promise<any>} - Результат
+ */
 AuthService.refreshToken = async (incomingToken) => {
 	const { userId } = await checkToken(incomingToken);
 
