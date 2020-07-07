@@ -8,6 +8,13 @@ import { UserController } from '@modules/v1/user/user.controller';
 import { ApplicationError } from '@utils/response';
 import { ERROR_CODES } from '@constants';
 
+const unauthorizedErrorPayload = {
+	statusCode: 401,
+	errorMessage: 'Access token is expired or invalid',
+	errorCode: ERROR_CODES.security__invalid_token_error,
+	errors: [],
+};
+
 /**
  * Создание промежуточного обработчика для проверки прав доступа к роуту
  * @param {array|null} allowedRoles - массив разрешенных ролей. Если null, то разрешены все роли.
@@ -17,12 +24,6 @@ export const authenticate = (allowedRoles = []) => async (req, res, next) => {
 	const { AUTHORIZATION_HEADER, JWT_SECRET } = config;
 	const accessToken = ((req.get(AUTHORIZATION_HEADER) || req.get(AUTHORIZATION_HEADER.toLowerCase())) || '')
 		.replace('Bearer ', '');
-	const unauthorizedErrorPayload = {
-		statusCode: 401,
-		errorMessage: 'Access token is expired or invalid',
-		errorCode: ERROR_CODES.security__invalid_token_error,
-		errors: [],
-	};
 
 	if (!accessToken) {
 		throw new ApplicationError(unauthorizedErrorPayload);
@@ -31,29 +32,55 @@ export const authenticate = (allowedRoles = []) => async (req, res, next) => {
 	try {
 		const decoded = await jwt.verify(accessToken, JWT_SECRET);
 		const userData = await UserController._getEntityResponse({ id: decoded.userId });
-
-		// if (allowedRoles !== null && !allowedRoles.includes(userData.role)) {
-		// 	throw new ApplicationError({
-		// 		statusCode: 403,
-		// 		errorMessage: 'Доступ запрещен.',
-		// 		errorCode: ERROR_CODES.security__no_permissions,
-		// 		errors: [],
-		// 	});
-		// }
-
-		if (allowedRoles !== null) {
-			throw new ApplicationError({
-				statusCode: 403,
-				errorMessage: 'Доступ запрещен.',
-				errorCode: ERROR_CODES.security__no_permissions,
-				errors: [],
-			});
-		}
-
 		req._userData = userData.dataValues;
 	} catch (error) {
-		throw new ApplicationError(unauthorizedErrorPayload);
+		if (error.name === 'TokenExpiredError' || error.name === 'JsonWebTokenError') {
+			throw new ApplicationError(unauthorizedErrorPayload);
+		}
+
+		throw error;
+	}
+
+	// if (allowedRoles !== null && !allowedRoles.includes(userData.role)) {
+	// 	throw new ApplicationError({
+	// 		statusCode: 403,
+	// 		errorMessage: 'Доступ запрещен.',
+	// 		errorCode: ERROR_CODES.security__no_permissions,
+	// 		errors: [],
+	// 	});
+	// }
+
+	if (allowedRoles !== null) {
+		throw new ApplicationError({
+			statusCode: 403,
+			errorMessage: 'Доступ запрещен.',
+			errorCode: ERROR_CODES.security__no_permissions,
+			errors: [],
+		});
 	}
 
 	next();
+};
+
+// Expired access token
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsImxvZ2luIjoicXdlQHF3ZS5jb20iLCJ0eXBlIjoiYWNjZXNzIiwiaWF0IjoxNTk0MDkxMDczLCJleHAiOjE1OTQwOTExMzN9.VNMo1YjoAlokPA-3YRX3gSdr5SxCrhDe97RPpeRDIsc
+// Expired refresh token
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInR5cGUiOiJyZWZyZXNoIiwiaWF0IjoxNTk0MDkwOTk1LCJleHAiOjE1OTQwOTExMTV9.FbMek0S8Li_-HMbOYyKv84lZ77b2BXk_s4fCudHVeU4
+
+/**
+ * Проверка токена на валидность
+ * @param {string} token - проверяемый токен
+ * @returns {object} - результат проверки
+ */
+export const checkToken = async (token) => {
+	const { JWT_SECRET } = config;
+	try {
+		return jwt.verify(token, JWT_SECRET);
+	} catch (error) {
+		if (error.name === 'TokenExpiredError' || error.name === 'JsonWebTokenError') {
+			throw new ApplicationError(unauthorizedErrorPayload);
+		}
+
+		throw error;
+	}
 };

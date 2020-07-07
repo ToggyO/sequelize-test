@@ -23,9 +23,10 @@ const notFoundErrorPayload = {
  * Получить пользователя как общий ответ
  * на операции создания / редактирования / получения по id
  * @param {string|number} id
+ * @param {array} include
  * @returns {Promise<object>}
  */
-UserController._getEntityResponse = async ({ id }) => {
+UserController._getEntityResponse = async ({ id, include = null }) => {
 	const userAttributes = UserService._getModelAttributes({
 		model: UserModel,
 	});
@@ -33,6 +34,7 @@ UserController._getEntityResponse = async ({ id }) => {
 	return UserService.getUser({
 		where: { id },
 		attributes: userAttributes,
+		include,
 	});
 };
 

@@ -23,3 +23,20 @@ AuthController.login = async (req, res, next) => {
 		next(error);
 	}
 };
+
+/**
+ * Обновление аксесс токена
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Promise<void>}
+ */
+AuthController.refreshToken = async (req, res, next) => {
+	try {
+		const { refreshToken } = getProp(req, 'body', {});
+		const resultData = await AuthService.refreshToken(refreshToken);
+		res.status(200).send(getSuccessRes({ resultData }));
+	} catch (error) {
+		next(error);
+	}
+};

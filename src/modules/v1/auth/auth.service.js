@@ -4,9 +4,11 @@
 import { ERROR_CODES } from '@constants';
 import { basicService, customCrypto } from '@utils/helpers';
 import { ApplicationError } from '@utils/response';
-import { generateToken } from '@utils/authentication';
+import { generateToken, checkToken } from '@utils/authentication';
 import { UserService } from '@modules/v1/user/user.service';
 import { AuthValidator } from './auth.validator';
+import { AuthModel } from './auth.model';
+import { UserController } from '../user/user.controller';
 
 export const AuthService = Object.create(basicService);
 
@@ -29,13 +31,21 @@ AuthService.login = async (values = {}) => {
 		errors: [],
 	};
 
-	const user = await UserService.getUser({ where: { email: driedValues.email } });
+	const user = await UserService.getUser({
+		where: { email: driedValues.email },
+		include: ['refreshToken'],
+	});
 
 	if (!user) {
 		throw new ApplicationError(invalidCredentialsErrorPayload);
 	}
 
-	const { passwordHash, salt } = user;
+	const {
+		id,
+		passwordHash,
+		salt,
+		refreshToken = [],
+	} = user;
 	const verifiedPassword = customCrypto.verifyPassword(
 		driedValues.password,
 		passwordHash,
@@ -46,27 +56,98 @@ AuthService.login = async (values = {}) => {
 		throw new ApplicationError(invalidCredentialsErrorPayload);
 	}
 
-	const tokens = generateToken({ userId: user.id, login: user.email });
+	const {
+		accessToken,
+		accessExpire,
+		refreshToken: newRefreshToken,
+		refreshExpire,
+	} = generateToken({ userId: user.id, login: user.email });
 
-	await user.createRefreshToken({
+	if (refreshToken.length >= 5) {
+		await AuthModel.deleteRefreshTokens({
+			where: { userId: id },
+		});
+	}
+
+	await AuthModel.saveRefreshToken({
 		userId: user.id,
-		refreshToken: tokens.refreshToken,
-		expiresIn: tokens.refreshExpire,
+		refreshToken: newRefreshToken,
+		expiresIn: refreshExpire,
 	});
 
 	const authData = {
 		id: user.id,
 		email: user.email,
 		// role: user.role,
-		tokens,
+		tokens: {
+			accessToken,
+			expire: accessExpire,
+			refreshToken,
+		},
 	};
 
 	return authData;
 };
 
-AuthService.refreshToken = async (token) => {
-	await 
-}
+AuthService.refreshToken = async (incomingToken) => {
+	const { userId } = await checkToken(incomingToken);
+
+	const user = await UserController._getEntityResponse({ id: userId, include: ['refreshToken'] });
+
+	const unauthorizedErrorPayload = {
+		statusCode: 401,
+		errorMessage: 'Refresh token is expired or invalid',
+		errorCode: ERROR_CODES.security__invalid_token_error,
+		errors: [],
+	};
+
+	if (!user) {
+		throw new ApplicationError(unauthorizedErrorPayload);
+	}
+
+	const { refreshToken = [] } = user;
+	const isTokenExists = refreshToken.some(record => record.refreshToken === incomingToken);
+
+	if (!isTokenExists) {
+		throw new ApplicationError(unauthorizedErrorPayload);
+	}
+
+	const {
+		accessToken,
+		accessExpire,
+		refreshToken: newRefreshToken,
+		refreshExpire,
+	} = generateToken({ userId: user.id, login: user.email });
+
+	if (refreshToken.length >= 5) {
+		await AuthModel.deleteRefreshTokens({
+			where: { userId },
+		});
+		await AuthModel.saveRefreshToken({
+			userId: user.id,
+			refreshToken: newRefreshToken,
+			expiresIn: refreshExpire,
+		});
+	} else {
+		await AuthModel.rewriteRefreshToken(
+			{
+				refreshToken: newRefreshToken,
+				expiresIn: refreshExpire,
+			},
+			{
+				where: { refreshToken: incomingToken },
+			},
+		);
+	}
+
+	const newTokensPayload = {
+		accessToken,
+		expire: accessExpire,
+		refreshToken: newRefreshToken,
+	};
+
+	return newTokensPayload;
+};
 
 /**
  * Схема преобразования данных для аутентификации пользователя

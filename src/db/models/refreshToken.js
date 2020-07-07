@@ -19,20 +19,21 @@ const scheme = (sequelize, DataTypes) => ({
 		field: 'user_id',
 		type: DataTypes.BIGINT,
 		allowNull: false,
+		_isCreatale: true,
 	},
 	refreshToken: {
 		field: 'refresh_token',
 		type: DataTypes.STRING,
 		allowNull: false,
 		_isCreatale: true,
+		_isEditable: true,
 	},
 	expiresIn: {
 		field: 'expires_in',
 		type: DataTypes.DATE,
 		allowNull: false,
-		// defaultValue: sequelize.literal(`${sequelize.fn('NOW')} + INTERVAL '7' days`),
-		// defaultValue: sequelize.query("SELECT created_at + interval `7 day` FROM refresh_tokens", { type: QueryTypes.SELECT }),
-		// defaultValue: sequelize.fn('ADDDATE', sequelize.fn('NOW'), 7),
+		_isCreatale: true,
+		_isEditable: true,
 	},
 	createdAt: {
 		field: 'created_at',
@@ -44,7 +45,6 @@ const scheme = (sequelize, DataTypes) => ({
 		type: DataTypes.DATE,
 		defaultValue: sequelize.fn('NOW'),
 	},
-	// FIXME: need to be tested
 });
 
 module.exports = scheme;

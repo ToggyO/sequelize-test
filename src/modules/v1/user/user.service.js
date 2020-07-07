@@ -13,7 +13,9 @@ UserService._getModels = () => UserModel._getModels();
 /**
  * Получить список пользователей
  * @param {object} where
- * @param {array} attributes
+ * @param {array} [attributes]
+ * @param {array} [include]
+ * @param {object} pagination
  * @returns {Promise<object>}
  */
 UserService.getUsers = async function ({
@@ -39,7 +41,8 @@ UserService.getUsers = async function ({
 /**
  * Получить пользователя
  * @param {object} where
- * @param {array} attributes
+ * @param {array} [attributes]
+ * @param {array} [include]
  * @returns {Promise<object>}
  */
 UserService.getUser = async function ({
@@ -49,9 +52,6 @@ UserService.getUser = async function ({
 } = {}) {
 	return UserModel.findOne({
 		where,
-		// include: [
-		// 	'refreshToken',
-		// ],
 		...(Array.isArray(attributes) ? { attributes } : {}),
 		...(Array.isArray(include) ? { include } : {}),
 	});
