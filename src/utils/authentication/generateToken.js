@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 
 import config from '@config';
-import { CustomDate } from '@utils/format';
+import { parseEnvExpireTime } from '@utils/format';
 
 /**
  * Генерация токена
@@ -22,11 +22,11 @@ export const generateToken = ({ userId, login }) => {
 			login,
 			type: 'access',
 		}, JWT_SECRET, { expiresIn: JWT_ACCESS_EXPIRES_IN }),
-		accessExpire: new CustomDate().addHours(1).toISOString(),
+		accessExpire: parseEnvExpireTime(JWT_ACCESS_EXPIRES_IN),
 		refreshToken: jwt.sign({
 			userId,
 			type: 'refresh',
 		}, JWT_SECRET, { expiresIn: JWT_REFRESH_EXPIRES_IN }),
-		refreshExpire: new CustomDate().addDays(7).toISOString(),
+		refreshExpire: parseEnvExpireTime(JWT_REFRESH_EXPIRES_IN),
 	};
 };

@@ -63,7 +63,7 @@ UserService.getUser = async function ({
  * @returns {object}
  */
 UserService.createUser = async function ({ values = {} }) {
-	const driedValues = UserService._dryPayload(values, UserService._createUpdatePayloadSchema());
+	const driedValues = UserService._dryPayload(values, UserService._createPayloadSchema());
 
 	await UserValidator.createUpdateUserValidator(driedValues);
 
@@ -92,12 +92,12 @@ UserService.createUser = async function ({ values = {} }) {
  * @returns {object}
  */
 UserService.updateUser = async function ({ id, values = {} }) {
-	await UserValidator.createUpdateUserValidator(values);
+	const driedValues = UserService._dryPayload(values, UserService._updatePayloadSchema());
 
-	// FIXME: заменить на dryPayloadValues
-	const { name, age } = values;
+	await UserValidator.createUpdateUserValidator(driedValues);
+
 	const updatedUser = await UserModel.update(
-		{ name, age },
+		driedValues,
 		{
 			where: { id },
 			returning: true,
@@ -119,12 +119,21 @@ UserService.deleteUser = async function ({ id }) {
 };
 
 /**
- * Схема преобразования данных для создания и редактирования
+ * Схема преобразования данных для создания
  * @returns {object}
  */
-UserService._createUpdatePayloadSchema = () => ({
+UserService._createPayloadSchema = () => ({
 	email: value => value,
 	password: value => value,
+	name: value => value,
+	age: value => value,
+});
+
+/**
+ * Схема преобразования данных для редактирования
+ * @returns {object}
+ */
+UserService._updatePayloadSchema = () => ({
 	name: value => value,
 	age: value => value,
 });

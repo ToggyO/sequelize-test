@@ -74,12 +74,6 @@ export const initializeModel = () => {
 		},
 	);
 
-	// AuthModel.beforeCreate((model) => {
-	// 	const now = new Date();
-	// 	const sevenDaysFromNow = now.setDate(now.getDate() + 7);
-	// 	model.expiresIn = sevenDaysFromNow.toISOString();
-	// });
-
 	/**
    * Обратный вызов на момент инициализации всех доступных моделей
    * @param models

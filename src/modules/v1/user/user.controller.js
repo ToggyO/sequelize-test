@@ -116,15 +116,8 @@ UserController.updateUser = async (req, res, next) => {
 	try {
 		const body = getProp(req, 'body', {});
 		const id = parseInt(getProp(req, 'params.id', {}), 10);
-		// FIXME: убрать badParameterErrorPayload после создания проверки токена
-		const badParameterErrorPayload = {
-			statusCode: 400,
-			errorMessage: USER_ERROR_MESSAGES.NO_USER_ID,
-			errorCode: BUSINESS_CONFLICT,
-			errors: [],
-		};
 
-		if (!id) throw new ApplicationError(badParameterErrorPayload);
+		if (!id) throw new ApplicationError(notFoundErrorPayload);
 
 		const updatedUser = await UserService.updateUser({
 			id,

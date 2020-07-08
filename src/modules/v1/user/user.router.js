@@ -129,8 +129,6 @@ export const createRouter = () => {
 	 *          - Users
 	 *        description: Create user
 	 *        summary: Create user
-	 *        security:
-	 *          - BearerAuth: []
 	 *        requestBody:
 	 *          content:
 	 *            application/json:
@@ -184,11 +182,17 @@ export const createRouter = () => {
 	 *        summary: Update current user
 	 *        security:
 	 *          - BearerAuth: []
+	 *        parameters:
+	 *          - in: path
+	 *            name: id
+	 *            schema:
+	 *              type: integer
+	 *            required: true
 	 *        requestBody:
 	 *          content:
 	 *            application/json:
 	 *              schema:
-	 *                $ref: '#/components/schemas/CreateUser'
+	 *                $ref: '#/components/schemas/UpdateUser'
 	 *        responses:
 	 *          200:
 	 *            description: Successful operation

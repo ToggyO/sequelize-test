@@ -90,7 +90,7 @@ AuthService.login = async (values = {}) => {
 };
 
 /**
- * Обновление аксесс токена
+ * Обновление аксесс токена с помощью рефреш токена
  * @returns {Promise<any>} - Результат
  */
 AuthService.refreshToken = async (incomingToken) => {
@@ -110,7 +110,11 @@ AuthService.refreshToken = async (incomingToken) => {
 	}
 
 	const { refreshToken = [] } = user;
-	const isTokenExists = refreshToken.some(record => record.refreshToken === incomingToken);
+	const isTokenExists = refreshToken.some(record => {
+		const isExists = record.refreshToken === incomingToken;
+		const isExpired = record.expiresIn.toISOString() > new Date().toISOString();
+		return isExists && isExpired;
+	});
 
 	if (!isTokenExists) {
 		throw new ApplicationError(unauthorizedErrorPayload);
