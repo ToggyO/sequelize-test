@@ -39,7 +39,7 @@ export const checkToken = async (token) => {
  * @returns {function} - промежуточный обработчик
  */
 export const authenticate = (allowedRoles = []) => async (req, res, next) => {
-	const { AUTHORIZATION_HEADER, JWT_SECRET } = config;
+	const { AUTHORIZATION_HEADER } = config;
 	const accessToken = ((req.get(AUTHORIZATION_HEADER) || req.get(AUTHORIZATION_HEADER.toLowerCase())) || '')
 		.replace('Bearer ', '');
 
@@ -47,17 +47,6 @@ export const authenticate = (allowedRoles = []) => async (req, res, next) => {
 		throw new ApplicationError(unauthorizedErrorPayload);
 	}
 
-	// try {
-	// 	const decoded = await jwt.verify(accessToken, JWT_SECRET);
-		// const userData = await UserController._getEntityResponse({ id: decoded.userId });
-		// req._userData = userData.dataValues;
-	// } catch (error) {
-	// 	if (error.name === 'TokenExpiredError' || error.name === 'JsonWebTokenError') {
-	// 		throw new ApplicationError(unauthorizedErrorPayload);
-	// 	}
-
-	// 	throw error;
-	// }
 	const { userId } = await checkToken(accessToken);
 	const userData = await UserController._getEntityResponse({ id: userId });
 	req._userData = userData.dataValues;
@@ -87,4 +76,3 @@ export const authenticate = (allowedRoles = []) => async (req, res, next) => {
 // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsImxvZ2luIjoicXdlQHF3ZS5jb20iLCJ0eXBlIjoiYWNjZXNzIiwiaWF0IjoxNTk0MDkxMDczLCJleHAiOjE1OTQwOTExMzN9.VNMo1YjoAlokPA-3YRX3gSdr5SxCrhDe97RPpeRDIsc
 // Expired refresh token
 // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInR5cGUiOiJyZWZyZXNoIiwiaWF0IjoxNTk0MDkwOTk1LCJleHAiOjE1OTQwOTExMTV9.FbMek0S8Li_-HMbOYyKv84lZ77b2BXk_s4fCudHVeU4
-

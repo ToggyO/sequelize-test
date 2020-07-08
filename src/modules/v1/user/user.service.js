@@ -89,22 +89,20 @@ UserService.createUser = async function ({ values = {} }) {
  * Редактировать пользователя
  * @param {number|string} id
  * @param {object} values
- * @returns {object}
+ * @returns {void}
  */
 UserService.updateUser = async function ({ id, values = {} }) {
 	const driedValues = UserService._dryPayload(values, UserService._updatePayloadSchema());
 
 	await UserValidator.createUpdateUserValidator(driedValues);
 
-	const updatedUser = await UserModel.update(
+	await UserModel.update(
 		driedValues,
 		{
 			where: { id },
-			returning: true,
+			returning: false,
 		},
 	);
-
-	return updatedUser[1][0];
 };
 
 /**
