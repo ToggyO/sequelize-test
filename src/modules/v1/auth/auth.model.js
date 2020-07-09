@@ -14,11 +14,11 @@ export class AuthModel extends Model {
 	 * @returns {Promise<Array<AuthModel>>}
 	 */
 	static getRefreshTokens = async ({ where = {}, attributes, include } = {}) => (
-		AuthModel.findAll({
-			where,
-			...(Array.isArray(attributes) ? { attributes } : {}),
-			...(Array.isArray(include) ? { include } : {}),
-		}));
+	  AuthModel.findAll({
+	    where,
+	    ...(Array.isArray(attributes) ? { attributes } : {}),
+	    ...(Array.isArray(include) ? { include } : {}),
+	  }));
 
 	/**
 	 * Записать рефреш токен в таблицу
@@ -26,7 +26,7 @@ export class AuthModel extends Model {
 	 * @returns {Promise<AuthModel>}
 	 */
 	static saveRefreshToken = async (payload = {}) => (
-		AuthModel.create(payload)
+	  AuthModel.create(payload)
 	);
 
 	/**
@@ -37,18 +37,18 @@ export class AuthModel extends Model {
 	 * @returns {Promise<void>}
 	 */
 	static rewriteRefreshToken = async (
-		{ refreshToken, expiresIn } = {},
-		{ where = {} } = {},
+	  { refreshToken, expiresIn } = {},
+	  { where = {} } = {},
 	) => (
-		AuthModel.update(
-			{
-				refreshToken,
-				expiresIn,
-			},
-			{
-				where,
-			},
-		)
+	  AuthModel.update(
+	    {
+	      refreshToken,
+	      expiresIn,
+	    },
+	    {
+	      where,
+	    },
+	  )
 	);
 
 	/**
@@ -57,37 +57,37 @@ export class AuthModel extends Model {
 	 * @returns {Promise<void>}
 	 */
 	static deleteRefreshTokens = async ({ where = {} } = {}) => (
-		AuthModel.destroy({ where })
+	  AuthModel.destroy({ where })
 	);
 }
 
 export const initializeModel = () => {
-	const sequelize = db.getSequelizeInstance();
+  const sequelize = db.getSequelizeInstance();
 
-	AuthModel.init(
-		scheme(sequelize, DataTypes),
-		{
-			sequelize,
-			modelName: 'refresh_token',
-			tableName: 'refresh_tokens',
-			timestamps: true,
-		},
-	);
+  AuthModel.init(
+    scheme(sequelize, DataTypes),
+    {
+      sequelize,
+      modelName: 'refresh_token',
+      tableName: 'refresh_tokens',
+      timestamps: true,
+    },
+  );
 
-	/**
+  /**
    * Обратный вызов на момент инициализации всех доступных моделей
    * @param models
    */
-	AuthModel.onAllModelsInitialized = (models = {}) => {
-		const { UserModel } = models;
+  AuthModel.onAllModelsInitialized = (models = {}) => {
+    const { UserModel } = models;
 
-		AuthModel.belongsTo(UserModel, {
-			foreignKey: 'user_id',
-			as: 'user',
-		});
+    AuthModel.belongsTo(UserModel, {
+      foreignKey: 'user_id',
+      as: 'user',
+    });
 
-		AuthModel._getModels = () => models;
-	};
+    AuthModel._getModels = () => models;
+  };
 
-	return AuthModel;
+  return AuthModel;
 };

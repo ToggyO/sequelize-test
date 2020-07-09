@@ -11,6 +11,6 @@ import LocalDevLogger from './strategies/local';
  * @returns {object} - логгер
  */
 export default function (props = {}) {
-	const { mode = 'development' } = props;
-	return mode === 'production' ? new ProdLogger(props) : new LocalDevLogger(props);
+  const { mode = 'development' } = props;
+  return mode === 'production' ? new ProdLogger(props) : new LocalDevLogger(props);
 }

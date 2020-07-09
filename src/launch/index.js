@@ -10,9 +10,9 @@ import * as errorHandler from './errorHandler';
  * @returns {Promise<void>}
  */
 export default async ({ app }) => {
-	common.run({ app });
-	await db.run({ app });
-	modules.run({ app });
-	await deferredTasks.run({ app });
-	errorHandler.run({ app });
+  common.run({ app });
+  await db.run({ app });
+  modules.run({ app });
+  await deferredTasks.run({ app });
+  errorHandler.run({ app });
 };

@@ -29,12 +29,12 @@ export class customCrypto {
    * @returns {string} - расшифрованная строка
    */
 	static decrypt = encryptedString => {
-		const decipher = crypto.createDecipheriv(this.#algorithm, this.#key, this.#iv);
-		let decrypted = decipher.update(encryptedString, 'utf8', 'hex');
-		console.log(decrypted);
-		decrypted += decipher.final('utf8');
-		console.log(decrypted);
-		return decrypted;
+	  const decipher = crypto.createDecipheriv(this.#algorithm, this.#key, this.#iv);
+	  let decrypted = decipher.update(encryptedString, 'utf8', 'hex');
+	  console.log(decrypted);
+	  decrypted += decipher.final('utf8');
+	  console.log(decrypted);
+	  return decrypted;
 	};
 
   /**
@@ -57,7 +57,7 @@ export class customCrypto {
    * @returns {boolean} - эквивалентность пароля и захешированного пароля
    */
 	static verifyPassword = (password, passwordHash, saltWithPepper) => {
-		const hash = crypto.pbkdf2Sync(password, saltWithPepper, 2048, 124, 'sha512').toString('hex');
-		return passwordHash === hash;
+	  const hash = crypto.pbkdf2Sync(password, saltWithPepper, 2048, 124, 'sha512').toString('hex');
+	  return passwordHash === hash;
 	};
 }

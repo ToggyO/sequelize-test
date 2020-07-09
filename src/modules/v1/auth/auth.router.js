@@ -11,9 +11,9 @@ import { AuthController } from './auth.controller';
  * @returns {Router}
  */
 export const createRouter = () => {
-	const router = Router();
+  const router = Router();
 
-	/**
+  /**
 	 * Login
 	 * @swagger
 	 * path:
@@ -55,9 +55,9 @@ export const createRouter = () => {
 	 *                  type: object
 	 *                  $ref: '#/components/schemas/incorrectParamsResponse'
 	 */
-	router.post('/token', asyncWrapper(AuthController.login));
+  router.post('/token', asyncWrapper(AuthController.login));
 
-	/**
+  /**
 	 * Refresh access token
 	 * @swagger
 	 * path:
@@ -97,7 +97,7 @@ export const createRouter = () => {
 	 *                  type: object
 	 *                  $ref: '#/components/schemas/unauthorizedResponse'
 	 */
-	router.put('/token', asyncWrapper(AuthController.refreshToken));
+  router.put('/token', asyncWrapper(AuthController.refreshToken));
 
-	return router;
+  return router;
 };

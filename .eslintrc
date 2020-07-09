@@ -11,7 +11,7 @@
     "ecmaVersion": 2018
   },
   "rules": {
-		"arrow-parens": "off",
+    "arrow-parens": "off",
     "no-bitwise": ["error", { "allow": ["~"] }],
     "no-unused-vars": ["error", { "vars": "all", "args": "after-used", "ignoreRestSiblings": true }],
     "max-len": ["error", { "code": 120 }],
@@ -24,7 +24,6 @@
     "no-confusing-arrow": "off",
     "func-names": "off",
     "consistent-return": "off",
-    "indent": [1, "tab"],
     "no-tabs": "off",
     "no-mixed-spaces-and-tabs": "off"
   },

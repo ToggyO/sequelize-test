@@ -8,7 +8,7 @@
  * @return {boolean}
  */
 export function isEmpty(val) {
-	return (val === undefined || val == null || val.length <= 0);
+  return (val === undefined || val == null || val.length <= 0);
 }
 
 /**
@@ -18,9 +18,9 @@ export function isEmpty(val) {
  */
 export function isObjectEmpty(object) {
   for (let key in object) { // eslint-disable-line
-		return false;
-	}
-	return true;
+    return false;
+  }
+  return true;
 }
 
 /**
@@ -33,10 +33,10 @@ export function isObjectEmpty(object) {
  * @returns {*}
  */
 export function getProp(object = {}, keys, defaultVal) {
-	keys = Array.isArray(keys) ? keys : keys.split('.');
-	object = object[keys[0]];
-	if (object && keys.length > 1) {
-		return getProp(object, keys.slice(1));
-	}
-	return object === undefined ? defaultVal : object;
+  keys = Array.isArray(keys) ? keys : keys.split('.');
+  object = object[keys[0]];
+  if (object && keys.length > 1) {
+    return getProp(object, keys.slice(1));
+  }
+  return object === undefined ? defaultVal : object;
 }

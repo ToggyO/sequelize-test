@@ -15,13 +15,13 @@ export const AuthController = {};
  * @returns {Promise<void>}
  */
 AuthController.login = async (req, res, next) => {
-	try {
-		const body = getProp(req, 'body', {});
-		const resultData = await AuthService.login(body);
-		res.status(200).send(getSuccessRes({ resultData }));
-	} catch (error) {
-		next(error);
-	}
+  try {
+    const body = getProp(req, 'body', {});
+    const resultData = await AuthService.login(body);
+    res.status(200).send(getSuccessRes({ resultData }));
+  } catch (error) {
+    next(error);
+  }
 };
 
 /**
@@ -32,11 +32,11 @@ AuthController.login = async (req, res, next) => {
  * @returns {Promise<void>}
  */
 AuthController.refreshToken = async (req, res, next) => {
-	try {
-		const { refreshToken } = getProp(req, 'body', {});
-		const resultData = await AuthService.refreshToken(refreshToken);
-		res.status(200).send(getSuccessRes({ resultData }));
-	} catch (error) {
-		next(error);
-	}
+  try {
+    const { refreshToken } = getProp(req, 'body', {});
+    const resultData = await AuthService.refreshToken(refreshToken);
+    res.status(200).send(getSuccessRes({ resultData }));
+  } catch (error) {
+    next(error);
+  }
 };

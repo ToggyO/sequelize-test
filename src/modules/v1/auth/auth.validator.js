@@ -14,19 +14,19 @@ export const AuthValidator = {};
  * @param {string} values.password - Пароль пользователя
  */
 AuthValidator.login = async (values = {}) => {
-	const { email, password } = values;
+  const { email, password } = values;
 
-	const errors = [
-		...(new Validator({ value: email, field: 'email' }).required().email().result()),
-		...(new Validator({ value: password, field: 'password' }).required().password().result()),
-	];
+  const errors = [
+    ...(new Validator({ value: email, field: 'email' }).required().email().result()),
+    ...(new Validator({ value: password, field: 'password' }).required().password().result()),
+  ];
 
-	if (errors.length) {
-		throw new ApplicationError({
-			statusCode: 400,
-			errorMessage: 'Invalid income parameters format',
-			errorCode: ERROR_CODES.validation,
-			errors,
-		});
-	}
+  if (errors.length) {
+    throw new ApplicationError({
+      statusCode: 400,
+      errorMessage: 'Invalid income parameters format',
+      errorCode: ERROR_CODES.validation,
+      errors,
+    });
+  }
 };

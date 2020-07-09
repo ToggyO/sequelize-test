@@ -2,18 +2,18 @@
  * Описание: Константы с возможными кодами ответов сервера
  */
 export const POSSIBLE_CODES = {
-	success: 'success',
-	not_found: 'not_found',
-	business_conflict: 'business_conflict',
-	bad_parameters: 'bad_parameters',
-	unprocessable_entity: 'unprocessable_entity',
-	internal_error: 'internal_error',
-	// usefull in future
-	security_error: 'security_error',
-	permission_error: 'permission_error',
-	too_many_requests: 'too_many_requests',
-	gateway_timeout: 'gateway_timeout',
-	object_input_error: 'object_input_error',
+  success: 'success',
+  not_found: 'not_found',
+  business_conflict: 'business_conflict',
+  bad_parameters: 'bad_parameters',
+  unprocessable_entity: 'unprocessable_entity',
+  internal_error: 'internal_error',
+  // usefull in future
+  security_error: 'security_error',
+  permission_error: 'permission_error',
+  too_many_requests: 'too_many_requests',
+  gateway_timeout: 'gateway_timeout',
+  object_input_error: 'object_input_error',
 };
 
 export const SUCCESS = POSSIBLE_CODES.success;

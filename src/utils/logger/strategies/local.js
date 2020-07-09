@@ -4,30 +4,30 @@ import chalk from 'chalk';
 import notifier from 'node-notifier';
 
 export default class LocalStrategy {
-	constructor(props = {}) {
-		this.#levels = {
-			error: 0,
-			warn: 1,
-			info: 2,
-			debug: 3,
-		};
-		this.#colors = {
-			debug: 'orange',
-			warn: 'yellow',
-			info: 'green',
-			error: 'red',
-		};
+  constructor(props = {}) {
+    this.#levels = {
+      error: 0,
+      warn: 1,
+      info: 2,
+      debug: 3,
+    };
+    this.#colors = {
+      debug: 'orange',
+      warn: 'yellow',
+      info: 'green',
+      error: 'red',
+    };
 
-		Object.keys(props).forEach((propName) => {
-			this[`_${propName}`] = props[propName];
-		});
+    Object.keys(props).forEach((propName) => {
+      this[`_${propName}`] = props[propName];
+    });
 
-		this.#logMethodsFabric(this.#levels);
-		// Create stream method
-		this.stream = {
-			write: (message) => this.warn(message),
-		};
-	}
+    this.#logMethodsFabric(this.#levels);
+    // Create stream method
+    this.stream = {
+      write: (message) => this.warn(message),
+    };
+  }
 
 	#levels = {};
 
@@ -44,23 +44,23 @@ export default class LocalStrategy {
    * @private
    */
 	#notify = ({
-		name,
-		version,
-		level,
-		message,
+	  name,
+	  version,
+	  level,
+	  message,
 	} = {}) => {
-		const options = {
-			sound: true,
-			wait: true,
-			// Choose your icon
-			icon: path.join(__dirname, '../deprecation.png'),
-		};
+	  const options = {
+	    sound: true,
+	    wait: true,
+	    // Choose your icon
+	    icon: path.join(__dirname, '../deprecation.png'),
+	  };
 
-		notifier.notify({
-			title: `${name} v.${version} got ${level} message`,
-			message,
-			...options,
-		});
+	  notifier.notify({
+	    title: `${name} v.${version} got ${level} message`,
+	    message,
+	    ...options,
+	  });
 	};
 
 	/**
@@ -78,16 +78,16 @@ export default class LocalStrategy {
    * @private
    */
 	#transportDataFormatter = (info = {}) => {
-		const { version } = this._app;
-		const now = new Date();
-		const accidentAt = now.toISOString();
-		const wasLaunchedAt = this.#getUpDate();
+	  const { version } = this._app;
+	  const now = new Date();
+	  const accidentAt = now.toISOString();
+	  const wasLaunchedAt = this.#getUpDate();
 
-		if (wasLaunchedAt) info.wasLaunchedAt = wasLaunchedAt;
-		if (accidentAt) info.accidentAt = accidentAt;
-		if (version) info.version = version;
+	  if (wasLaunchedAt) info.wasLaunchedAt = wasLaunchedAt;
+	  if (accidentAt) info.accidentAt = accidentAt;
+	  if (version) info.version = version;
 
-		return info;
+	  return info;
 	};
 
 	/**
@@ -96,11 +96,11 @@ export default class LocalStrategy {
    * @private
    */
 	#getUpDate = () => {
-		const now = Date.now();
-		const upTime = parseInt(process.uptime(), 10);
-		const upDateInMS = now - upTime;
-		const upDate = new Date(upDateInMS).toISOString();
-		return upDate;
+	  const now = Date.now();
+	  const upTime = parseInt(process.uptime(), 10);
+	  const upDateInMS = now - upTime;
+	  const upDate = new Date(upDateInMS).toISOString();
+	  return upDate;
 	};
 
 	/**
@@ -109,39 +109,39 @@ export default class LocalStrategy {
    * @private
    */
 	#logMethodsFabric = (levels = {}) => {
-		const custom = this.#transportFormatterCustom();
-		const customConsole = custom({ type: 'console' });
+	  const custom = this.#transportFormatterCustom();
+	  const customConsole = custom({ type: 'console' });
 
-		Object.keys(levels).forEach((level) => {
-			this[level] = (message, options = {}) => {
-				if (typeof message !== 'string') return;
-				const { color = this.#colors[level] } = options;
-				const coloredOutput = chalk.keyword(color);
-				const { name = 'server', version = 'unknown' } = this._app;
-				const logMessage = (() => {
-					let msg;
-					try {
-						// FIXME: add second arg { type: 'console' }
-						msg = JSON.stringify(customConsole.transform({ level, message }));
-					} catch (error) {
-						msg = '';
-					}
-					return msg;
-				})();
+	  Object.keys(levels).forEach((level) => {
+	    this[level] = (message, options = {}) => {
+	      if (typeof message !== 'string') return;
+	      const { color = this.#colors[level] } = options;
+	      const coloredOutput = chalk.keyword(color);
+	      const { name = 'server', version = 'unknown' } = this._app;
+	      const logMessage = (() => {
+	        let msg;
+	        try {
+	          // FIXME: add second arg { type: 'console' }
+	          msg = JSON.stringify(customConsole.transform({ level, message }));
+	        } catch (error) {
+	          msg = '';
+	        }
+	        return msg;
+	      })();
 
-				this.#notify({
-					name,
-					version,
-					level,
-					message,
-				});
+	      this.#notify({
+	        name,
+	        version,
+	        level,
+	        message,
+	      });
 
-				if (level !== 'error') {
-					console.log(coloredOutput(`[${level.toUpperCase()}] ${logMessage}`));
-				} else {
-					console.error(coloredOutput(`[${level.toUpperCase()}] ${logMessage}`));
-				}
-			};
-		});
+	      if (level !== 'error') {
+	        console.log(coloredOutput(`[${level.toUpperCase()}] ${logMessage}`));
+	      } else {
+	        console.error(coloredOutput(`[${level.toUpperCase()}] ${logMessage}`));
+	      }
+	    };
+	  });
 	};
 }

@@ -9,8 +9,8 @@
  * @return {object} результат, отправляемый на клиент
  */
 export const getSuccessRes = ({
-	resultData = null,
+  resultData = null,
 } = {}) => ({
-	errorCode: 0,
-	resultData,
+  errorCode: 0,
+  resultData,
 });

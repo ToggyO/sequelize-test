@@ -1,5 +1,5 @@
 /**
- * Описание: Файл содержит роутинг и определения сваггера для модуля компаний партнеров
+ * Описание: Файл содержит роутинг и определения сваггера для модуля пользователей
  */
 import { Router } from 'express';
 
@@ -11,9 +11,9 @@ import { UserController } from './user.controller';
  * Роутер: Users
  */
 export const createRouter = () => {
-	const router = Router();
+  const router = Router();
 
-	/**
+  /**
 	 * Get list of users
 	 * @swagger
 	 * path:
@@ -62,9 +62,9 @@ export const createRouter = () => {
 	 *                  type: object
 	 *                  $ref: '#/components/schemas/forbiddenResponse'
 	 */
-	router.get('/', asyncWrapper(UserController.getUsers));
+  router.get('/', asyncWrapper(UserController.getUsers));
 
-	/**
+  /**
 	 * Get list user by id
 	 * @swagger
 	 * path:
@@ -117,9 +117,9 @@ export const createRouter = () => {
 	 *                  type: object
 	 *                  $ref: '#/components/schemas/notFoundResponse'
 	 */
-	router.get('/:id', asyncWrapper(authenticate(null)), asyncWrapper(UserController.getUser));
+  router.get('/:id', asyncWrapper(authenticate(null)), asyncWrapper(UserController.getUser));
 
-	/**
+  /**
 	 * Create user
 	 * @swagger
 	 * path:
@@ -168,18 +168,18 @@ export const createRouter = () => {
 	 *                  type: object
 	 *                  $ref: '#/components/schemas/forbiddenResponse'
 	 */
-	router.post('/', asyncWrapper(UserController.createUser));
+  router.post('/', asyncWrapper(UserController.createUser));
 
-	/**
-	 * Update current user
+  /**
+	 * Update user
 	 * @swagger
 	 * path:
 	 *  /users/{id}:
 	 *      put:
 	 *        tags:
 	 *          - Users
-	 *        description: Update current user
-	 *        summary: Update current user
+	 *        description: Update user
+	 *        summary: Update user
 	 *        security:
 	 *          - BearerAuth: []
 	 *        parameters:
@@ -227,9 +227,9 @@ export const createRouter = () => {
 	 *                  type: object
 	 *                  $ref: '#/components/schemas/forbiddenResponse'
 	 */
-	router.put('/:id', asyncWrapper(authenticate(null)), asyncWrapper(UserController.updateUser));
+  router.put('/:id', asyncWrapper(authenticate(null)), asyncWrapper(UserController.updateUser));
 
-	/**
+  /**
 	 * Delete user by id
 	 * @swagger
 	 * path:
@@ -263,7 +263,7 @@ export const createRouter = () => {
 	 *                  type: object
 	 *                  $ref: '#/components/schemas/forbiddenResponse'
 	 */
-	router.delete('/:id', asyncWrapper(authenticate(null)), asyncWrapper(UserController.deleteUser));
+  router.delete('/:id', asyncWrapper(authenticate(null)), asyncWrapper(UserController.deleteUser));
 
-	return router;
+  return router;
 };

@@ -9,19 +9,19 @@ import { USER_ERROR_MESSAGES } from './constants';
 export const UserValidator = Object.create({});
 
 UserValidator.createUpdateUserValidator = async function (values = {}) {
-	const { name, age } = values;
+  const { name, age } = values;
 
-	const errors = [
-		...(new Validator({ value: name, field: 'name' }).required().result()),
-		...(new Validator({ value: age, field: 'age' }).required().isNumber().result()),
-	];
+  const errors = [
+    ...(new Validator({ value: name, field: 'name' }).required().result()),
+    ...(new Validator({ value: age, field: 'age' }).required().isNumber().result()),
+  ];
 
-	if (errors.length) {
-		throw new ApplicationError({
-			statusCode: 400,
-			errorMessage: USER_ERROR_MESSAGES.USER_CREATION_ERROR,
-			errorCode: ERROR_CODES.validation,
-			errors,
-		});
-	}
+  if (errors.length) {
+    throw new ApplicationError({
+      statusCode: 400,
+      errorMessage: USER_ERROR_MESSAGES.USER_CREATION_ERROR,
+      errorCode: ERROR_CODES.validation,
+      errors,
+    });
+  }
 };

@@ -9,8 +9,8 @@ export class CustomDate extends Date {
 	 * @returns {CustomDate} - Результат
 	 */
 	addSeconds = seconds => {
-		this.setSeconds(this.getSeconds() + seconds);
-		return this;
+	  this.setSeconds(this.getSeconds() + seconds);
+	  return this;
 	};
 
 	/**
@@ -19,8 +19,8 @@ export class CustomDate extends Date {
  * @returns {CustomDate} - Результат
  */
 	addMinutes = minutes => {
-		this.setMinutes(this.getMinutes() + minutes);
-		return this;
+	  this.setMinutes(this.getMinutes() + minutes);
+	  return this;
 	};
 
 	/**
@@ -29,8 +29,8 @@ export class CustomDate extends Date {
 	 * @returns {CustomDate} - Результат
 	 */
 	addHours = hours => {
-		this.setHours(this.getHours() + hours);
-		return this;
+	  this.setHours(this.getHours() + hours);
+	  return this;
 	};
 
 	/**
@@ -39,8 +39,8 @@ export class CustomDate extends Date {
 	 * @returns {CustomDate} - Результат
 	 */
 	addDays = days => {
-		this.setDate(this.getDate() + days);
-		return this;
+	  this.setDate(this.getDate() + days);
+	  return this;
 	};
 
 	/**
@@ -49,8 +49,8 @@ export class CustomDate extends Date {
 	 * @returns {CustomDate} - Результат
 	 */
 	addMonths = months => {
-		this.setMonth(this.getMonth() + months);
-		return this;
+	  this.setMonth(this.getMonth() + months);
+	  return this;
 	};
 
 	/**
@@ -59,7 +59,7 @@ export class CustomDate extends Date {
 	 * @returns {CustomDate} - Результат
 	 */
 	addYears = years => {
-		this.setFullYear(this.getFullYear() + years);
-		return this;
+	  this.setFullYear(this.getFullYear() + years);
+	  return this;
 	};
 }

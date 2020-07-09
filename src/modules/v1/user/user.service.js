@@ -19,23 +19,23 @@ UserService._getModels = () => UserModel._getModels();
  * @returns {Promise<object>}
  */
 UserService.getUsers = async function ({
-	where = {},
-	attributes,
-	include,
-	pagination = {},
+  where = {},
+  attributes,
+  include,
+  pagination = {},
 } = {}) {
-	const users = await UserModel.findAndCountAll({
-		where,
-		...(Array.isArray(attributes) ? { attributes } : {}),
-		...(Array.isArray(include) ? { include } : {}),
-		...pagination,
-	});
-	const items = getProp(users, 'rows', []);
-	const count = getProp(users, 'count', []);
-	return {
-		items,
-		...(UserService._getPaginationResponse({ count }, pagination)),
-	};
+  const users = await UserModel.findAndCountAll({
+    where,
+    ...(Array.isArray(attributes) ? { attributes } : {}),
+    ...(Array.isArray(include) ? { include } : {}),
+    ...pagination,
+  });
+  const items = getProp(users, 'rows', []);
+  const count = getProp(users, 'count', []);
+  return {
+    items,
+    ...(UserService._getPaginationResponse({ count }, pagination)),
+  };
 };
 
 /**
@@ -46,15 +46,15 @@ UserService.getUsers = async function ({
  * @returns {Promise<object>}
  */
 UserService.getUser = async function ({
-	where = {},
-	attributes,
-	include,
+  where = {},
+  attributes,
+  include,
 } = {}) {
-	return UserModel.findOne({
-		where,
-		...(Array.isArray(attributes) ? { attributes } : {}),
-		...(Array.isArray(include) ? { include } : {}),
-	});
+  return UserModel.findOne({
+    where,
+    ...(Array.isArray(attributes) ? { attributes } : {}),
+    ...(Array.isArray(include) ? { include } : {}),
+  });
 };
 
 /**
@@ -63,26 +63,26 @@ UserService.getUser = async function ({
  * @returns {object}
  */
 UserService.createUser = async function ({ values = {} }) {
-	const driedValues = UserService._dryPayload(values, UserService._createPayloadSchema());
+  const driedValues = UserService._dryPayload(values, UserService._createPayloadSchema());
 
-	await UserValidator.createUpdateUserValidator(driedValues);
+  await UserValidator.createUpdateUserValidator(driedValues);
 
-	const withHashedData = (data) => ({
-		...data,
-		...(values.password ? customCrypto.hashPassword(values.password) : {}),
-	});
+  const withHashedData = (data) => ({
+    ...data,
+    ...(values.password ? customCrypto.hashPassword(values.password) : {}),
+  });
 
-	const options = {
-		model: UserModel,
-		modelSchemaKey: '_isCreatable',
-		callback: withHashedData,
-	};
+  const options = {
+    model: UserModel,
+    modelSchemaKey: '_isCreatable',
+    callback: withHashedData,
+  };
 
-	const allowedValues = UserService._useSchema(driedValues, options);
+  const allowedValues = UserService._useSchema(driedValues, options);
 
-	const createdUser = await UserModel.create(allowedValues);
+  const createdUser = await UserModel.create(allowedValues);
 
-	return createdUser;
+  return createdUser;
 };
 
 /**
@@ -92,17 +92,17 @@ UserService.createUser = async function ({ values = {} }) {
  * @returns {void}
  */
 UserService.updateUser = async function ({ id, values = {} }) {
-	const driedValues = UserService._dryPayload(values, UserService._updatePayloadSchema());
+  const driedValues = UserService._dryPayload(values, UserService._updatePayloadSchema());
 
-	await UserValidator.createUpdateUserValidator(driedValues);
+  await UserValidator.createUpdateUserValidator(driedValues);
 
-	await UserModel.update(
-		driedValues,
-		{
-			where: { id },
-			returning: false,
-		},
-	);
+  await UserModel.update(
+    driedValues,
+    {
+      where: { id },
+      returning: false,
+    },
+  );
 };
 
 /**
@@ -111,9 +111,9 @@ UserService.updateUser = async function ({ id, values = {} }) {
  * @returns {number} - количество удаленных сущностей
  */
 UserService.deleteUser = async function ({ id }) {
-	const deletedRowsCount = await UserModel.destroy({ where: { id } });
+  const deletedRowsCount = await UserModel.destroy({ where: { id } });
 
-	return deletedRowsCount;
+  return deletedRowsCount;
 };
 
 /**
@@ -121,10 +121,10 @@ UserService.deleteUser = async function ({ id }) {
  * @returns {object}
  */
 UserService._createPayloadSchema = () => ({
-	email: value => value,
-	password: value => value,
-	name: value => value,
-	age: value => value,
+  email: value => value,
+  password: value => value,
+  name: value => value,
+  age: value => value,
 });
 
 /**
@@ -132,6 +132,6 @@ UserService._createPayloadSchema = () => ({
  * @returns {object}
  */
 UserService._updatePayloadSchema = () => ({
-	name: value => value,
-	age: value => value,
+  name: value => value,
+  age: value => value,
 });

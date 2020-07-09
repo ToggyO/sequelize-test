@@ -8,19 +8,19 @@ const CRON_PER_HALF_DAY = '0 0 01,13 * * *';
 const CRON_PER_DAY = '0 0 23 * * *';
 
 export async function cleanUpInvalidTokenHandler({ app }) {
-	const log = app.get('log');
-	try {
-		await AuthModel.deleteRefreshTokens({
-			where: {
-				expiresIn: {
-					[Op.lte]: Sequelize.fn('NOW'),
-				},
-			},
-		});
-		log.debug('Tokens clean up done');
-	} catch (error) {
-		log.error('Tokens clean up failed');
-	}
+  const log = app.get('log');
+  try {
+    await AuthModel.deleteRefreshTokens({
+      where: {
+        expiresIn: {
+          [Op.lte]: Sequelize.fn('NOW'),
+        },
+      },
+    });
+    log.debug('Tokens clean up done');
+  } catch (error) {
+    log.error('Tokens clean up failed');
+  }
 }
 
 /**
@@ -33,21 +33,21 @@ export async function cleanUpInvalidTokenHandler({ app }) {
  * @returns {Promise<*>}
  */
 export async function runCleanUpInvalidTokensJob({
-	app,
-	cronTime = CRON_PER_DAY,
-	start = true,
-	timeZone = 'Atlantic/Azores',
-	runOnInit = false,
+  app,
+  cronTime = CRON_PER_DAY,
+  start = true,
+  timeZone = 'Atlantic/Azores',
+  runOnInit = false,
 }) {
-	return new CronJob({
-		cronTime,
-		onTick: async () => {
-			await cleanUpInvalidTokenHandler({ app });
-		},
-		start,
-		timeZone,
-		runOnInit,
-	});
+  return new CronJob({
+    cronTime,
+    onTick: async () => {
+      await cleanUpInvalidTokenHandler({ app });
+    },
+    start,
+    timeZone,
+    runOnInit,
+  });
 }
 
 /**
@@ -55,8 +55,8 @@ export async function runCleanUpInvalidTokensJob({
  * @param {object} app - экземпляр приложения
  */
 export async function run({ app }) {
-	const cleanUpInvalidTokensJobCronTime = (
-		(config.CRON_CHECK_INVALID_TOKENS_DELAY_SECS || 3600) < 24 * 60 * 60 ? CRON_PER_HALF_DAY : CRON_PER_DAY
-	);
-	await runCleanUpInvalidTokensJob({ app, cronTime: cleanUpInvalidTokensJobCronTime });
+  const cleanUpInvalidTokensJobCronTime = (
+    (config.CRON_CHECK_INVALID_TOKENS_DELAY_SECS || 3600) < 24 * 60 * 60 ? CRON_PER_HALF_DAY : CRON_PER_DAY
+  );
+  await runCleanUpInvalidTokensJob({ app, cronTime: cleanUpInvalidTokensJobCronTime });
 }

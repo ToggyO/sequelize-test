@@ -6,7 +6,7 @@ import moment from 'moment';
  * @return {string} - дата в формате ISOString
  */
 export function parseEnvExpireTime(expireTime) {
-	const digits = expireTime.match(/\d/g);
-	const words = expireTime.match(/\D/g);
-	return moment().add(digits[0], words[0]).toISOString();
+  const digits = expireTime.match(/\d/g);
+  const words = expireTime.match(/\D/g);
+  return moment().add(digits[0], words[0]).toISOString();
 }

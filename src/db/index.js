@@ -4,17 +4,17 @@
 import Sequelize from 'sequelize';
 
 class Connector {
-	/**
+  /**
    * @param {object} props
    * @returns {void}
    */
-	constructor(props = {}) {
-		Object.keys(props).forEach((propName) => {
-			this[`_${propName}`] = props[propName];
-		});
-	}
+  constructor(props = {}) {
+    Object.keys(props).forEach((propName) => {
+      this[`_${propName}`] = props[propName];
+    });
+  }
 
-	/**
+  /**
    * Инициализация подключения
    * @param {string} dbName
    * @param {string} dbUser
@@ -22,25 +22,25 @@ class Connector {
    * @param {object} dbOptions
    * @returns {void}
    */
-	init(dbName, dbUser, dbPassword, dbOptions = {}) {
-		this._sequelize = new Sequelize(dbName, dbUser, dbPassword, dbOptions);
-	}
+  init(dbName, dbUser, dbPassword, dbOptions = {}) {
+    this._sequelize = new Sequelize(dbName, dbUser, dbPassword, dbOptions);
+  }
 
-	/**
+  /**
    * Геттер экземпляра
    * @returns {Promise}
    */
-	testConnection() {
-		return this._sequelize.authenticate();
-	}
+  testConnection() {
+    return this._sequelize.authenticate();
+  }
 
-	/**
+  /**
    * Геттер экземпляра sequelize
    * @returns {object}
    */
-	getSequelizeInstance() {
-		return this._sequelize;
-	}
+  getSequelizeInstance() {
+    return this._sequelize;
+  }
 }
 
 export const db = new Connector();
